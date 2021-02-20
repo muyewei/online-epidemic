@@ -1,0 +1,87 @@
+.share{
+    width: 100%;
+}
+
+.shareContainer{
+    width: 800px;
+    margin: auto;
+    margin-top: 50px;
+    border: 1px black solid;
+}
+
+.shareContainer > div{
+    width: 100%;
+    border: 1px black solid;
+}
+
+.share-person{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+.share-notice{
+    text-indent: 20px;
+}
+
+.share-main{
+    height: 360px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.share-main-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.list-to-right{
+    justify-content: flex-end;
+}
+
+.share-main-list span{
+    display: inline-block;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.share-main-list-name{
+    padding: 5px;
+    background-color: rgb(216, 255, 44);
+}
+
+.share-main-list-value{
+    margin: 10px 0 ;
+    border-radius: 5px;
+    max-width: 100%;
+    padding: 10px;
+    background-color: rgb(77, 247, 176);
+}
+
+
+.share-entry{
+    height: 30px;
+    text-indent: 30px;
+}
+
+.share-input{
+    position: relative;
+    height: 100px;
+}
+
+.share-input-area{
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    resize: none;
+}
+
+.share-input-button{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 70px;
+    height: 30px;
+    background-color: rgb(0, 110, 255);
+}

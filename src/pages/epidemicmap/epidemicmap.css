@@ -1,0 +1,176 @@
+.epidemic-map{
+    width: 100%;
+    height: 100%;
+}
+
+.epidemic-map-list{
+    width: 800px;
+    margin: auto;
+    margin-top: 60px;
+    border: 1px solid blueviolet;
+}
+
+.epidemic-map-notshow{
+    display: none;
+}
+
+
+/* 标题 */
+.epidemic-map-list .epidemic-map-header ul{
+    display: flex;
+    text-align: center;
+    width: 100%;
+}
+
+.epidemic-map-list .epidemic-map-header ul li{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.epidemic-map-list .epidemic-map-header ul li span{
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.epidemic-map-list .epidemic-map-header ul li span:hover{
+    cursor: pointer;
+    background-color: skyblue;
+    color: rgb(236, 238, 130);
+}
+
+.epidemic-map-active{
+    background-color: skyblue;
+    color: white;
+}
+
+.epidemic-map-details{
+    padding: 0 10px;
+}
+
+.epidemic-map-title{
+    font-size: 32px;
+    color: #000;
+    margin: 0 20px 0 10px;
+}
+
+.epidemic-map-time{
+    font-size: 20px;
+    font-weight: 400;
+    color: #999999;
+    margin-bottom: 40px;
+}
+
+
+/* 疫情数据 */
+.epidemic-map-info{
+    display: flex;
+    flex-wrap: wrap;
+    height: 400px;
+}
+
+.epidemic-map-info li{
+    width: 25%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.epidemic-map-info li h5{
+    font-size: 24px;
+    color: #333333;
+    font-weight: normal;
+}
+.epidemic-map-info li p{
+    font-size: 24px;
+    font-weight: 700;
+    margin: 15px 0 20px;
+}
+.epidemic-map-info li span{
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+}
+.epidemic-map-info li span em{
+    color: #999999;
+}
+
+
+/* 中国地图 */
+.epidemic-map-china{
+    padding: 13px 10px 0;
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+.epidemic-map-china nav{
+    height: 40px;
+    border-radius: 5px;
+    background-color: #E2E6EB;
+    display: flex;
+    box-sizing: border-box;
+    text-align: center;
+}
+.epidemic-map-china nav span {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    line-height: 40px;
+    color: #000;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.epidemic-map-china nav span .epidemic-map-active {
+    font-weight: 700;
+    background-color: #fff;
+    
+}
+.epidemic-map-china .map-china-title {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+}
+.epidemic-map-china .map-china-content {
+    width: 100%;
+    height: 500px;
+}
+
+
+/* 确诊趋势 */
+.epidemic-map-trend{
+    border: 1px solid #ccc;
+    margin: 30px 20px 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.epidemic-map-trend .trend-title{
+    color:#555555;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.epidemic-map-trend .trend-content{
+    height: 310px;
+}
+
+
+/* 新增确诊 */
+.epidemic-map-confirm{
+    border: 1px solid #ccc;
+    margin: 30px 20px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.epidemic-map-confirm .confirm-title{
+    color:#555555;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.epidemic-map-confirm .confirm-content{
+    height: 310px;
+}

@@ -1,0 +1,27 @@
+.top-nav{
+    width: 100%;
+    background-color: rgb(24,144,255);
+    height: 50px;
+    text-align: center;
+}
+
+.top-nav div{
+    height: 100%;
+    line-height: 40px;
+    padding: 0 20px;
+}
+.top-nav div a{
+    color: white;
+}
+.tn-logo{
+    float: left;
+    font-size: 20px;
+}
+
+.tn-user-icon{
+    float: right;
+}
+
+.tn-exit{
+    float: right;
+}

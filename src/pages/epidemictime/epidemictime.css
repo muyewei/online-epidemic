@@ -1,0 +1,53 @@
+.epidemic-time-line{
+    width: 800px;
+    margin: auto;
+    margin-top: 80px;
+}
+
+.epidemic-time-item{
+    transition: all 2s linear;
+}
+
+.epidemic-time-item-title{
+    position: relative;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: auto;
+}
+
+
+.epidemic-time-item-all{
+    position: absolute;
+    opacity: 0;
+    top: 60px;
+    right: 0;
+    width: 80%;
+    z-index: 100;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 10px;
+    transition: all 0.5s linear;
+}
+
+.epidemic-time-item-title:hover .epidemic-time-item-all{
+    opacity: 1;
+    height: auto;
+    background-color: rgb(230, 230, 230);
+}
+
+.ant-timeline-item-label{
+    width: 12%!important;
+}
+
+.ant-timeline-item-tail,.ant-timeline-item-head{
+    left: 15%!important;
+}
+
+.ant-timeline-item-content{
+    left: calc(15% - 4px)!important;
+    width: calc(85% - 14px)!important;
+}

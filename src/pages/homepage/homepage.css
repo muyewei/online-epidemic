@@ -1,0 +1,71 @@
+.homepage{
+    width: 100%;
+}
+
+.slick-list{
+    width: 100%;
+}
+
+.homepage div{
+    position: relative;
+}
+
+.homepage-covid{
+    height: 700px;
+}
+
+.homepage-covid div{
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    z-index: 100;
+    color: white;
+}
+
+.homepage-covid{
+    height: 700px;
+}
+
+.homepage-covid div{
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    z-index: 100;
+    color: white;
+}
+
+.homepage-spread{
+    height: 700px;
+}
+
+.homepage-spread div{
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    z-index: 100;
+    color: rgb(31, 30, 29);
+}
+
+.homepage-vaccines{
+    height: 700px;
+}
+
+.homepage-vaccines div{
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    z-index: 100;
+    color: black;
+}
+
+.homepage-protect{
+    height: 800px;
+}
+
+.homepage-protect div{
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    z-index: 100;
+    color: white;
+}

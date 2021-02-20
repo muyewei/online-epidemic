@@ -1,0 +1,65 @@
+.topnav{
+    width: 100%;
+    height: 60px;
+}
+
+.topnav-logo{
+    line-height: 60px;
+    padding: 0 30px;
+    font-size: 32px;
+    height: 100%;
+    float: left;
+}
+
+.topnav-list{
+    float: right;
+    text-align: center;
+}
+
+.topnav-list ul{
+    margin-right: 50px;
+}
+
+.topnav-list li{
+    display: inline-block;
+    line-height: 60px;
+    font-size: 16px;
+    height: 100%;
+}
+
+.topnav-list a{
+    position: relative;
+    text-decoration: none;
+    color: black;
+    display: block;
+    width: 100px;
+    height: 100%;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.topnav-list a:hover{
+    color: red;
+}
+
+.topnav-list a::before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    border-bottom: red 2px solid;
+    transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+} 
+
+.topnav-list a:hover::before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    opacity: 1;
+    border-bottom: red 2px solid;
+} 

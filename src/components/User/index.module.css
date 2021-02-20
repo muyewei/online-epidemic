@@ -1,0 +1,16 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.aside{
+    width: 200px;
+    background-color: violet;
+    height: 100%;
+}
+
+.main{
+    flex: 1;
+    background-color: wheat;
+    height: 100%;
+}
