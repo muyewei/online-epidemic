@@ -22,12 +22,13 @@ class App extends React.Component {
   state = {
     userroute: ""
   }
-  constructor() {
-    super()
-    let token = document.cookie.split(";").filter((item) => item.indexOf("token=") >= 0)[ 0 ] || ""
-    console.log("get cookie: ", token.split("=")[1])
-  }
+  // constructor() {
+  //   super()
+  //   let token = document.cookie.split(";").filter((item) => item.indexOf("token=") >= 0)[ 0 ] || ""
+  //   console.log("get cookie: ", token.split("=")[1])
+  // }
   componentDidMount() {
+    // console.log(this.props)
     if (this.props.location.pathname.indexOf("/user") < 0) {
       this.setState({userroute: false})
     } else {
@@ -37,9 +38,14 @@ class App extends React.Component {
   render() {
     return (
       <div style={{ width: "100%", height: "100%" }}>
-        <header>
-          <Topnav></Topnav>
-        </header>
+          <Switch>
+            <Route path="/user"></Route>
+            <Route path="/">
+              <header>
+                  <Topnav></Topnav>
+              </header>
+            </Route>
+          </Switch>
         <main>
           <Switch>
             <Route path="/login" component={ Login } />

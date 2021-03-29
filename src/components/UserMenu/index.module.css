@@ -18,6 +18,10 @@
     padding: 10px 10px;
 }
 
+.menu_list_block:hover{
+    cursor: pointer;
+}
+
 .menu_list_detail{
     height: 0;
     opacity: 0;
@@ -25,10 +29,15 @@
     transition: height 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-.menu_list_block:hover .menu_list_detail{
+.menu_list_detail:hover{
+    background-color: rgb(66, 172, 243);
+    transition: background-color 0.25s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.menu_detail_show .menu_list_detail{
     opacity: 1;
     height: 40px;
-    padding: 10px 10px;
+    padding: 10px 10px; 
 }
 
 .menu_list_icon{
@@ -52,21 +61,37 @@
     border-top: 10px #fff solid;
 }
 
+.menu_list_block:hover{
+    background-color: rgb(145, 232, 243);
+}
+
 .menu_list_block:hover .menu_list_icon{
     top: 6px;
 }
 
-.menu_list_block:hover .menu_list_icon:before,.menu_list_block:hover .menu_list_icon:after{
+.menu_list_block:hover .menu_list_icon:after{
+    border-top: 10px rgb(145, 232, 243) solid;
+}
+
+.menu_detail_show:hover .menu_list_icon:before,.menu_detail_show:hover .menu_list_icon:after{
     border-top: 10px transparent dashed;
     border-left: 10px transparent dashed;
     border-right: 10px transparent dashed;
     border-bottom: 10px #fff solid;
 }
-.menu_list_block:hover .menu_list_icon:before{
+.menu_detail_show:hover .menu_list_icon:before{
     top: 3px;
     border-bottom: 10px #0099CC solid;
 }
-.menu_list_block:hover .menu_list_icon:after{
+.menu_detail_show:hover .menu_list_icon:after{
     top: 5px; 
-    border-bottom: 10px #fff solid;
+    border-bottom: 10px rgb(145, 232, 243) solid;
+}
+
+.userDetail{
+    text-indent: 10px;
+    height: 40px;
+    line-height: 40px;
+    font-size: large;
+    font-style: italic;
 }

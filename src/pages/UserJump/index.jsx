@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Route, Switch, Redirect } from 'react-router-dom'
-import Student from "../Student"
-import Teacher from "../Teacher"
+import { Route, Switch } from 'react-router-dom'
+import Normal from "../Normal"
+import Publisher from "../Publisher"
 import Admin from "../Admin"
 
 import './index.css'
@@ -10,20 +10,20 @@ import './index.css'
 class UserJump extends Component {
     constructor(props) {
         super(props)
-        console.log('userjump: ', this.props.user === "teacher")
-        this.props.user === "student" ? this.props.history.push("/user/student")
-            : this.props.user === "teacher" ? this.props.history.push("/user/teacher")
-                : this.props.user === "admin" ? this.props.history.push("/user/admin")
-                    : this.props.history.push("/nullUser")
+        let identify = this.props.loginState.identify.replace(/[ ]/g, "")
+        // console.log('userjump: ', identify === "normal")
+        identify === "normal" ? this.props.history.push("/user/normal")
+            : identify === "publisher" ? this.props.history.push("/user/publisher")
+                : identify === "admin" ? this.props.history.push("/user/admin")
+                    : this.props.history.push("/login")
     }
     render() {
         return (
             <>  
                 <Switch>
-                    <Route path="/user/student" component={ Student }/>
-                    <Route path="/user/teacher" component={ Teacher } />
+                    <Route path="/user/normal" component={ Normal }/>
+                    <Route path="/user/publisher" component={ Publisher } />
                     <Route path="/user/admin" component={ Admin }/>
-                    <Redirect to="/login" />
                 </Switch>
             </>
         )
@@ -31,5 +31,5 @@ class UserJump extends Component {
 }
 
 export default connect(
-    state => ({ user: state.login }),
+    state => ({ loginState: state.login }),
 )(UserJump)

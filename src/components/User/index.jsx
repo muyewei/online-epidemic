@@ -9,6 +9,13 @@ import styles from './index.module.css'
  * 顶部菜单栏
  */
 export default class User extends Component {
+    state = {
+        listName: []
+    }
+    checkListName = (item) => {
+        console.log("checkListName", item)
+        this.setState({listName: [item.item,item.i.name]})
+    }
     render() {
         console.log('user')
         return (
@@ -18,10 +25,10 @@ export default class User extends Component {
                 </div>
                 <div className={styles.container}>
                     <div className={styles.aside}>
-                        <UserMenu></UserMenu>
+                        <UserMenu username={this.props.username} menu={this.props.menu} callListName={this.checkListName}></UserMenu>
                     </div>
                     <div className={styles.main}>
-                        <UserMain></UserMain>
+                        <UserMain listName={this.state.listName}></UserMain>
                     </div></div>
 
             </>

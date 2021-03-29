@@ -7,7 +7,7 @@ import { createCancelAction } from "../../redux/actions/login_action"
 
 class topnav extends Component {
     cancelAccount = () => {
-        this.props.cancel("visitor")
+        this.props.cancel({user: "visitor", identify: "visitor"})
     }
     render() {
         return (
@@ -31,8 +31,12 @@ class topnav extends Component {
                         </li>
                         <li>
                             {
-                                this.props.user !== "visitor" ? (
-                                    <Link to="/index" style={{textOverflow:"ellipsis",whiteSpace: "nowrap"}} title="点击注销" onClick={() => this.cancelAccount()}>{ this.props.user }(点击注销)</Link>
+                                this.props.loginState.user !== "visitor" ? (
+                                    <ul>
+                                        <li><Link to="/user">{ this.props.loginState.user }</Link></li>
+                                        <li><Link to="/index" style={{textOverflow:"ellipsis",whiteSpace: "nowrap"}} title="点击注销" onClick={() => this.cancelAccount()}>点击注销</Link></li>
+                                    </ul>
+                                    
                                 ): (
                                     <Link to="/login">登录 / 注册</Link>
                                 )
@@ -46,7 +50,7 @@ class topnav extends Component {
 }
 
 export default connect(
-    state => ({ user: state.login }),
+    state => ({ loginState: state.login }),
     dispatch => ({
         cancel: data => dispatch(createCancelAction(data))
     })

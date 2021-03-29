@@ -3,13 +3,12 @@ import { connect } from "react-redux"
 import TopNav from "../../components/UserTopNav"
 import './index.css'
 
-class Student extends Component {
+class Normal extends Component {
     render() {
         return (
             <div>
                 <TopNav></TopNav>
                 student
-                {this.props.user}
             </div>
         )
 
@@ -17,5 +16,5 @@ class Student extends Component {
 }
 
 export default connect(
-    state => ({ user: state }),
-)(Student)
+    state => ({ loginState: state.login }),
+)(Normal)

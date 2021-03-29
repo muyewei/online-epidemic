@@ -14,11 +14,11 @@ import { Link } from "react-router-dom"
 
 class Login extends Component {
     state = {
-        username: "hello123",
-        password: "hello123"
+        username: "control123",
+        password: "control123"
     }
     componentDidMount() {
-        if (this.props.user !== "visitor") {
+        if (this.props.loginState.user !== "visitor") {
             this.props.history.push(`/index`)
         }
     }
@@ -37,7 +37,7 @@ class Login extends Component {
                 let exp = new Date();    
                 exp.setTime(exp.getTime() + 60 * 60 * 1000);
                 document.cookie = "token=" + res.data.token + ";expires=" + exp.toGMTString() + ";path=/"
-                this.props.login(res.data.user)
+                this.props.login({user: res.data.user, identify: res.data.identify})
                 this.props.history.push(`/index`)
         })
     }
@@ -109,7 +109,7 @@ class Login extends Component {
 }
 
 export default connect(
-    state => ({ user: state.login }),
+    state => ({ loginState: state.login }),
     dispatch => ({
         login: data => dispatch(createLoginAction(data))
     })

@@ -32,7 +32,9 @@ export default class TopNav extends Component {
                 <div className={style["tn-user-icon"]}>
                     <TeamOutlined />
                 </div>
-                
+                <div>
+                    <Link to="/index">主页</Link>
+                </div>
             </div>
         )
     }

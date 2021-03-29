@@ -45,7 +45,7 @@ class share extends Component {
     sendInput = () => {
         console.log('send')
         let value = {
-            username: this.props.user,
+            username: this.props.loginState.user,
             write: this.writeValues.current.value
         }
         if (this.writeValues.current.value === "") {
@@ -65,7 +65,7 @@ class share extends Component {
                         {
                             this.state.main.map((v, i) => {
                                 return (
-                                    <div className={`share-main-list ${ v.username === this.props.user ? "list-to-right" : ""}`} key={i}>
+                                    <div className={`share-main-list ${ v.username === this.props.loginState.user ? "list-to-right" : ""}`} key={i}>
                                             <span className="share-main-list-name">
                                                 {v.username}：
                                             </span>
@@ -99,5 +99,5 @@ class share extends Component {
 }
 
 export default connect(
-    state => ({ user: state.login }),
+    state => ({ loginState: state.login }),
 )(share)
