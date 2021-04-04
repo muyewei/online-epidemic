@@ -5,7 +5,8 @@
 .menu_list{
     position: relative;
     width: 200px;
-    background-color: white;
+    background-color: rgb(30,34,45);
+    color: white;
     transition: width 1s linear;
 }
 
@@ -22,6 +23,7 @@
     cursor: pointer;
 }
 
+
 .menu_list_detail{
     height: 0;
     opacity: 0;
@@ -30,7 +32,7 @@
 }
 
 .menu_list_detail:hover{
-    background-color: rgb(66, 172, 243);
+    background-color: rgb(21,24,34);
     transition: background-color 0.25s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
@@ -54,38 +56,35 @@
     border-bottom: 10px transparent solid;
 }
 .menu_list_icon:before{
-    top: 2px;
-    border-top: 10px #0099CC solid;
+    top: 12px;
+    border-top: 10px #fff solid;
 }
 .menu_list_icon:after{
-    border-top: 10px #fff solid;
+    top: 10px;
+    border-top: 10px rgb(30,34,35) solid;
 }
 
 .menu_list_block:hover{
-    background-color: rgb(145, 232, 243);
+    background-color: rgb(38,47,62);
 }
 
-.menu_list_block:hover .menu_list_icon{
-    top: 6px;
+.menu_detail_show{
+    background-color: rgb(21,24,34);
 }
 
-.menu_list_block:hover .menu_list_icon:after{
-    border-top: 10px rgb(145, 232, 243) solid;
-}
-
-.menu_detail_show:hover .menu_list_icon:before,.menu_detail_show:hover .menu_list_icon:after{
+.menu_detail_show .menu_list_icon:before,.menu_detail_show .menu_list_icon:after{
     border-top: 10px transparent dashed;
     border-left: 10px transparent dashed;
     border-right: 10px transparent dashed;
     border-bottom: 10px #fff solid;
 }
-.menu_detail_show:hover .menu_list_icon:before{
+.menu_detail_show .menu_list_icon:before{
     top: 3px;
-    border-bottom: 10px #0099CC solid;
+    border-bottom: 10px #fff solid;
 }
-.menu_detail_show:hover .menu_list_icon:after{
-    top: 5px; 
-    border-bottom: 10px rgb(145, 232, 243) solid;
+.menu_detail_show .menu_list_icon:after{
+    top: 6px;
+    border-bottom: 10px rgb(21,24,34) solid;
 }
 
 .userDetail{

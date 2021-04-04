@@ -47,7 +47,7 @@ export default class Menu extends Component {
                             this.props.menu.map((item) => {
                                 return (
                                     <li key={item.title} className={`${style["menu_list_block"]} ${this.state.itemValue === item.title ? style["menu_detail_show"]: ""}`} onClick={() => this.showItem(item.title)}>
-                                        <div>{item.title}</div>
+                                        <div style={{padding:"10px 0"}}>{item.title}</div>
                                         <i className={style["menu_list_icon"]} ></i>
                                         <ul>
                                             {
