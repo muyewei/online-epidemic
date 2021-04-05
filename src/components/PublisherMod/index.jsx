@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
 // import style from './index.module.css'
-import { Form, Input, Button, Select, Modal, Menu, Dropdown, Radio } from 'antd';
+import { Form, Input, Button, Select, Modal, Menu, Dropdown, Radio, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 
 const formItemLayout = {
@@ -22,8 +22,36 @@ const addButtonLayout = {
 
 const singletype = {
     title: "",
+    optionlength: 4,
     option: ["","","",""],
     answer: [""],
+    analyze: ""
+}
+
+const multitype = {
+    title: "",
+    optionlength: 4,
+    option: ["","","",""],
+    answer: [""],
+    analyze: ""
+}
+
+const judgetype = {
+    title: "",
+    answer: "",
+    analyze: ""
+}
+
+const gaptype = {
+    title: "",
+    optionlength: 1,
+    option: [""],
+    analyze: ""
+}
+
+const shorttype = {
+    title: "",
+    answer: "",
     analyze: ""
 }
 
@@ -34,22 +62,51 @@ class CreateTest extends Component{
         loading: false,
         visible: false,
         defaultquestion: "选择题目",
-        optiondefault: 4,
+        optiondefault: 0,
         optiondefaultValue: [],
         singletype: singletype,
+        resetsingle: singletype,
+        multitype: multitype,
+        resetmulti: multitype,
+        judgetype: judgetype,
+        resetjudge: judgetype,
+        gaptype: gaptype,
+        resetgap: gaptype,
+        shorttype: shorttype,
+        resetshort: shorttype,
+        nowqusetiontype: "",
         warning: ""
     };
     
     componentDidUpdate (preProps, preState) {
         // console.log("did update", preState, this.state)
-        if(preState.optiondefault > this.state.optiondefault){
-            let st = singletype
-            st.option.pop()
-            this.setState({singletype: st})
-        }else if(preState.optiondefault < this.state.optiondefault){
-            let st = singletype
-            st.option.push("")
-            this.setState({singletype: st})
+        if(this.state.optiondefault === 1){
+            let st = this.state[this.state.nowqusetiontype]
+            if(st.optionlength < 9){
+                st.option.push("")
+                st.optionlength++
+                this.setState({[this.state.nowqusetiontype]: st, optiondefault: 0})
+            }
+        }else if(this.state.optiondefault === 2){
+            let st = this.state[this.state.nowqusetiontype]
+            if(st.optionlength > 1){
+                st.option.pop()
+                st.optionlength--
+                this.setState({[this.state.nowqusetiontype]: st, optiondefault: 0})
+            }
+        }
+        if(preState.defaultquestion !== this.state.defaultquestion){
+            if(this.state.defaultquestion === "单选题"){
+                this.setState({nowqusetiontype: "singletype"})
+            }else if(this.state.defaultquestion === "多选题"){
+                this.setState({nowqusetiontype: "multitype"})
+            }else if(this.state.defaultquestion === "判断题"){
+                this.setState({nowqusetiontype: "judgetype"})
+            }else if(this.state.defaultquestion === "填空题"){
+                this.setState({nowqusetiontype: "gaptype"})
+            }else if(this.state.defaultquestion === "简答题"){
+                this.setState({nowqusetiontype: "shorttype"})
+            }
         }
     }
 
@@ -65,32 +122,38 @@ class CreateTest extends Component{
         // this.setState({ loading: false, visible: false });
         // }, 3000);
         let warningsingle = ""
-        let st = this.state.singletype
-        // console.log(st)
+        let st = this.state[this.state.nowqusetiontype]
         if(st.title === ""){
-            warningsingle += "标题 · "
+            warningsingle += "题目 · "
         }
-
-        for (let index = 0; index < st.option.length; index++) {
-            const element = st.option[index];
-            if(element === ""){
-                warningsingle += "选项 · "
+        if(this.state.nowqusetiontype === "singletype" || this.state.nowqusetiontype === "multitype" || this.state.nowqusetiontype === "gaptype"){
+            for (let index = 0; index < st.option.length; index++) {
+                const element = st.option[index];
+                if(element === ""){
+                    warningsingle += "选项 · "
+                }
+                break
             }
-            break
+            if(this.state.nowqusetiontype !== "gaptype"){
+                for (let index = 0; index < st.answer.length; index++) {
+                    const element = st.answer[index];
+                    if(element === ""){
+                        warningsingle += "答案 · "
+                    }
+                    break
+                }
+            }
         }
-
-        for (let index = 0; index < st.answer.length; index++) {
-            const element = st.answer[index];
-            if(element === ""){
+        if(this.state.nowqusetiontype === "judgetype" || this.state.nowqusetiontype === "shorttype"){
+            if(st.answer === ""){
                 warningsingle += "答案 · "
             }
-            break
         }
-
+        
         if(warningsingle !== ""){
             warningsingle += "不能为空"
         }
-
+        console.log("okokok submit: ", this.state.nowqusetiontype, this.state[this.state.nowqusetiontype])
         this.setState({warning: warningsingle})
     };
 
@@ -99,37 +162,52 @@ class CreateTest extends Component{
     };
 
     handleMenuClick = (item) =>{
-        console.log("menu click:", item.domEvent.target.innerText)
+        console.log("menu click next qustion type", item.domEvent.target.innerText)
+        console.log("menu click pre qustion type", this.state.nowqusetiontype)
+        console.log("menu click pre qustio value", this.state[this.state.nowqusetiontype])
         this.setState({defaultquestion: item.domEvent.target.innerText})
     }
     //当问题标题更改时触发次函数
     handleTitleChange = (e) => {
         // console.log("title value:", e.target.value)
-        let st = this.state.singletype
+        let st = this.state[this.state.nowqusetiontype]
         st.title = e.target.value
-        this.setState({singletype: st})
+        this.setState({[this.state.nowqusetiontype]: st})
     }
     //当选项的答案更改时触发此函数
     handleValueClick = (e) =>{
-        // console.log("menu value:", e.target.value)
-        let st = this.state.singletype
-        st.answer = e.target.value
-        this.setState({singletype: st})
+        console.log("menu value:", e)
+        let st = this.state[this.state.nowqusetiontype]
+        if(this.state.nowqusetiontype === "singletype" || this.state.nowqusetiontype === "judgetype" || this.state.nowqusetiontype === "shorttype"){
+            st.answer = e.target.value
+        }else if(this.state.nowqusetiontype === "multitype"){
+            st.answer = e
+        }
+       
+        this.setState({[this.state.nowqusetiontype]: st})
     }
-    //当选项的值改变的时候触发此函数
+    //当选项的各项的值改变的时候触发此函数
     handleOptionChange = (e) => {
-        const num = e.target.id.split("singleoption")[1]
-        // console.log("Option value:", num)
-        let st = this.state.singletype
-        st.option[Number(num)] = e.target.value
-        this.setState({singletype: st})
+        // console.log("Option value:", e)
+        let st = this.state[this.state.nowqusetiontype]
+        if(this.state.nowqusetiontype === "singletype"){
+            let num = e.target.id.split("singleoption")[1]
+            st.option[Number(num)] = e.target.value
+        }else if(this.state.nowqusetiontype === "multitype"){
+            let num = e.target.id.split("multioption")[1]
+            st.option[Number(num)] = e.target.value
+        }else if(this.state.nowqusetiontype === "gaptype"){
+            let num = e.target.id.split("gapoption")[1]
+            st.option[Number(num)] = e.target.value
+        }
+        this.setState({[this.state.nowqusetiontype]: st})
     }
     //当选项的解析改变的时候触发此函数
     handleAnalyzeChange = (e) => {
         // console.log("Option value:", e)
-        let st = this.state.singletype
+        let st = this.state[this.state.nowqusetiontype]
         st.analyze = e.target.value
-        this.setState({singletype: st})
+        this.setState({[this.state.nowqusetiontype]: st})
     }
     render() {
         const { visible, loading } = this.state;
@@ -253,23 +331,26 @@ class CreateTest extends Component{
                                                 label="题目"
                                                 rules={[{ required: true, message: 'Please input your password!' }]}
                                             >
-                                                <Input placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
+                                                <TextArea placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
                                             </Form.Item>
                                             <Form.Item
-                                                name="singeOption"
                                                 label="选项"
                                                 rules={[{ required: true, message: 'Please input your password!' }]}
                                                 style={{fontFamily:"monospace"}}
-                                            >
-                                                {
-                                                    [...Array(this.state.optiondefault)].map((el,i) => {
-                                                        return(
-                                                            <Input addonBefore={String.fromCharCode(65 + i*1)} id={"singleoption" + i} key={"singleoption" + i} onChange={(e) => this.handleOptionChange(e)}/>
-                                                        )
-                                                    })
-                                                }
-                                                <Button onClick={() => {let od = this.state.optiondefault; if(od > 8){od=8} ; this.setState({optiondefault: ++od})}}>点击增加</Button>
-                                                <Button onClick={() => {let od = this.state.optiondefault; if(od < 1){od=1}; this.setState({optiondefault: --od})}}>点击减少</Button>
+                                                >
+                                                <Form.Item
+                                                    name="singeOption"
+                                                >
+                                                    {
+                                                        [...Array(this.state.singletype.optionlength)].map((el,i) => {
+                                                            return(
+                                                                <Input addonBefore={String.fromCharCode(65 + i*1)} id={"singleoption" + i} key={"singleoption" + i} onChange={(e) => this.handleOptionChange(e)}/>
+                                                            )
+                                                        })
+                                                    }
+                                                </Form.Item>
+                                                <Button onClick={() => {this.setState({optiondefault: 1})}}>点击增加</Button>
+                                                <Button onClick={() => {this.setState({optiondefault: 2})}}>点击减少</Button>
                                             </Form.Item>
                                             <Form.Item
                                                 name="singeAnswer"
@@ -278,7 +359,7 @@ class CreateTest extends Component{
                                             >
                                                 <Radio.Group onChange={(e) => this.handleValueClick(e)}>
                                                 {
-                                                    [...Array(this.state.optiondefault)].map((el,i) => {
+                                                    [...Array(this.state.singletype.optionlength)].map((el,i) => {
                                                         return(
                                                             <Radio value={String.fromCharCode(65 + i*1)}  key={"singleanswer" + i}>{String.fromCharCode(65 + i*1)}</Radio>
                                                         )
@@ -294,10 +375,143 @@ class CreateTest extends Component{
                                             </Form.Item>
                                         </Form>
                                     </div>
-                                    <div className="multi"></div>
-                                    <div className="judge"></div>
-                                    <div className="gap"></div>
-                                    <div className="short"></div>
+                                    <div className="multi"  style={{display: this.state.defaultquestion === "多选题" ? "block" : "none"}}>
+                                        <Form>
+                                            <Form.Item
+                                                name="multiTitle"
+                                                label="题目"
+                                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                            >
+                                                <TextArea placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="选项"
+                                                name="multiOption"
+                                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                                style={{fontFamily:"monospace"}}
+                                            >
+                                                    {
+                                                        [...Array(this.state.multitype.optionlength)].map((el,i) => {
+                                                            return(
+                                                                <Input addonBefore={String.fromCharCode(65 + i*1)} id={"multioption" + i} key={"multioption" + i} onChange={(e) => this.handleOptionChange(e)}/>
+                                                            )
+                                                        })
+                                                    }
+                                                <Button onClick={() => {this.setState({optiondefault: 1})}}>点击增加</Button>
+                                                <Button onClick={() => {this.setState({optiondefault: 2})}}>点击减少</Button>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="multiAnswer"
+                                                label="答案"
+                                                rules={[{required: true}]}
+                                            >
+                                                <Checkbox.Group style={{ width: '100%' }} onChange={(e) => this.handleValueClick(e)}>
+                                                    <Row>
+                                                    {
+                                                        [...Array(this.state.multitype.optionlength)].map((el,i) => {
+                                                            return(
+                                                                <Col span={4}  key={"multianswer" + i}>
+                                                                    <Checkbox value={String.fromCharCode(65 + i*1)}>{String.fromCharCode(65 + i*1)}</Checkbox>
+                                                                </Col>
+                                                            )
+                                                        })
+                                                    }
+                                                    </Row>
+                                                </Checkbox.Group>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="multiAnalyze"
+                                                label="解析"
+                                            >
+                                                <TextArea onChange={(e) => this.handleAnalyzeChange(e)}></TextArea>
+                                            </Form.Item>
+                                        </Form>
+                                    </div>
+                                    <div className="judge"  style={{display: this.state.defaultquestion === "判断题" ? "block" : "none"}}>
+                                        <Form>
+                                            <Form.Item
+                                                name="judgeTitle"
+                                                label="题目"
+                                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                            >
+                                                <Input placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="judgeAnswer"
+                                                label="答案"
+                                                rules={[{required: true}]}
+                                            >
+                                                <Radio.Group onChange={(e) => this.handleValueClick(e)}>
+                                                    <Radio value={"judgeTrue"}  key={"judgeAnswerTrue"}>√</Radio>
+                                                    <Radio value={"judgeFalse"}  key={"judgeAnswerFalse"}>×</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="judgeAnalyze"
+                                                label="解析"
+                                            >
+                                                <TextArea onChange={(e) => this.handleAnalyzeChange(e)}></TextArea>
+                                            </Form.Item>
+                                        </Form>
+                                    </div>
+                                    <div className="gap"  style={{display: this.state.defaultquestion === "填空题" ? "block" : "none"}}>
+                                        <Form>
+                                            <Form.Item
+                                                name="gapTitle"
+                                                label="题目"
+                                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                            >
+                                                <TextArea placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="选项"
+                                                name="gapOption"
+                                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                                style={{fontFamily:"monospace"}}
+                                            >
+                                                    {
+                                                        [...Array(this.state.gaptype.optionlength)].map((el,i) => {
+                                                            return(
+                                                                <Input addonBefore={String.fromCharCode(65 + i*1)} id={"gapoption" + i} key={"gapoption" + i} onChange={(e) => this.handleOptionChange(e)}/>
+                                                            )
+                                                        })
+                                                    }
+                                                <Button onClick={() => {this.setState({optiondefault: 1})}}>点击增加</Button>
+                                                <Button onClick={() => {this.setState({optiondefault: 2})}}>点击减少</Button>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="gapAnalyze"
+                                                label="解析"
+                                            >
+                                                <TextArea onChange={(e) => this.handleAnalyzeChange(e)}></TextArea>
+                                            </Form.Item>
+                                        </Form>
+                                    </div>
+                                    <div className="short"  style={{display: this.state.defaultquestion === "简答题" ? "block" : "none"}}>
+                                    <Form>
+                                            <Form.Item
+                                                name="gapTitle"
+                                                label="题目"
+                                                rules={[{ required: true}]}
+                                            >
+                                                <TextArea placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="答案"
+                                                name="shortOption"
+                                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                                style={{fontFamily:"monospace"}}
+                                            >
+                                                <TextArea onChange={(e) => this.handleValueClick(e)}></TextArea>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="gapAnalyze"
+                                                label="解析"
+                                            >
+                                                <TextArea onChange={(e) => this.handleAnalyzeChange(e)}></TextArea>
+                                            </Form.Item>
+                                        </Form>
+                                    </div>
                                     <div style={{display: this.state.warning === "" ? "none" : "block", color: "red"}}>{this.state.warning}</div>
                                 </div>
                             </div>
@@ -336,7 +550,7 @@ export default class PublisherMod extends Component {
     render() {
         return (
             <div className="">
-                    <CreateTest></CreateTest>
+                    <CreateTest key="createTest"></CreateTest>
             </div>
         )
     }
