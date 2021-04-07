@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
-// import style from './index.module.css'
+import style from './index.module.css'
 import { Form, Input, Button, Select, Modal, Menu, Dropdown, Radio, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 
@@ -9,7 +9,7 @@ const formItemLayout = {
       span: 4,
     },
     wrapperCol: {
-      span: 8,
+      span: 12,
     },
   };
 
@@ -21,6 +21,7 @@ const addButtonLayout = {
 };
 
 const singletype = {
+    type: "singletype",
     title: "",
     optionlength: 4,
     option: ["","","",""],
@@ -29,6 +30,7 @@ const singletype = {
 }
 
 const multitype = {
+    type: "multitype",
     title: "",
     optionlength: 4,
     option: ["","","",""],
@@ -37,12 +39,14 @@ const multitype = {
 }
 
 const judgetype = {
+    type: "judgetype",
     title: "",
     answer: "",
     analyze: ""
 }
 
 const gaptype = {
+    type: "gaptype",
     title: "",
     optionlength: 1,
     option: [""],
@@ -50,20 +54,61 @@ const gaptype = {
 }
 
 const shorttype = {
+    type: "shorttype",
     title: "",
     answer: "",
     analyze: ""
 }
 
+const textpreviewvalue = [
+    {
+        analyze: "",
+        answer: "A",
+        option: ["123", "123123", "1231233", "12"],
+        optionlength: 4,
+        title: "123123",
+        type: "singletype"
+    },
+    {
+        analyze: "",
+        answer: ["A","B"],
+        option: ["123", "123123", "1231233", "12"],
+        optionlength: 4,
+        title: "123123",
+        type: "multitype"
+    },
+    {
+        analyze: "123123",
+        answer: "√",
+        title: "123213123",
+        type: "judgetype"
+    },
+    {
+        analyze: "",
+        option: ["123123", "123123123"],
+        optionlength: 2,
+        title: "123123",
+        type: "gaptype"
+    }
+]
+
 const {TextArea} = Input
 
 class CreateTest extends Component{
+
+    paperPreviewRef = React.createRef()
+
     state = {
         loading: false,
         visible: false,
         defaultquestion: "选择题目",
         optiondefault: 0,
         optiondefaultValue: [],
+        papername: "123123",
+        paperbrief: "",
+        paperstyle: "",
+        papertime: "",
+        paperpassword: "",
         singletype: singletype,
         resetsingle: singletype,
         multitype: multitype,
@@ -75,6 +120,7 @@ class CreateTest extends Component{
         shorttype: shorttype,
         resetshort: shorttype,
         nowqusetiontype: "",
+        paperPreviewValue: textpreviewvalue,
         warning: ""
     };
     
@@ -115,14 +161,15 @@ class CreateTest extends Component{
         visible: true,
         });
     };
-
+    //提交题目
     handleOk = () => {
-        // this.setState({ loading: true });
-        // setTimeout(() => {
-        // this.setState({ loading: false, visible: false });
-        // }, 3000);
+        this.setState({ loading: true });
+        setTimeout(() => {
+        this.setState({ loading: false, visible: false });
+        }, 3000);
         let warningsingle = ""
         let st = this.state[this.state.nowqusetiontype]
+        let paperPreviewValue = this.state.paperPreviewValue
         if(st.title === ""){
             warningsingle += "题目 · "
         }
@@ -152,9 +199,11 @@ class CreateTest extends Component{
         
         if(warningsingle !== ""){
             warningsingle += "不能为空"
+        }else{
+            paperPreviewValue.push(st)
         }
         console.log("okokok submit: ", this.state.nowqusetiontype, this.state[this.state.nowqusetiontype])
-        this.setState({warning: warningsingle})
+        this.setState({warning: warningsingle,paperPreviewValue: paperPreviewValue})
     };
 
     handleCancel = () => {
@@ -176,7 +225,7 @@ class CreateTest extends Component{
     }
     //当选项的答案更改时触发此函数
     handleValueClick = (e) =>{
-        console.log("menu value:", e)
+        // console.log("menu value:", e)
         let st = this.state[this.state.nowqusetiontype]
         if(this.state.nowqusetiontype === "singletype" || this.state.nowqusetiontype === "judgetype" || this.state.nowqusetiontype === "shorttype"){
             st.answer = e.target.value
@@ -209,6 +258,12 @@ class CreateTest extends Component{
         st.analyze = e.target.value
         this.setState({[this.state.nowqusetiontype]: st})
     }
+    //删除试卷预览中的第i题
+    deletePreviewQustion = (i) => {
+        let ppv = this.state.paperPreviewValue
+        ppv.splice(i,1)
+        this.setState({paperPreviewValue: ppv})
+    }
     render() {
         const { visible, loading } = this.state;
         const menu = (
@@ -231,7 +286,7 @@ class CreateTest extends Component{
             </Menu>
         );
       return (
-            <div style={{width: "90%",margin: "50px auto"}}>
+            <div style={{width: "100%",margin: "50px auto"}}>
                 <Form 
                 >
                     <Form.Item
@@ -244,7 +299,7 @@ class CreateTest extends Component{
                             },
                         ]}
                     >
-                        <Input />
+                        <Input onChange={(e) => {this.setState({papername: e.target.value})}}/>
                     </Form.Item>
                     <Form.Item
                     {...formItemLayout}
@@ -256,28 +311,28 @@ class CreateTest extends Component{
                             },
                         ]}
                     >
-                        <Input />
+                        <Input onChange={(e) => {this.setState({paperstyle: e.target.value})}}/>
                     </Form.Item>
                     <Form.Item
                     {...formItemLayout}
                         name="paperbrief"
                         label="考卷简介"
                     >
-                        <TextArea />
+                        <TextArea onChange={(e) => {this.setState({paperbrief: e.target.value})}}/>
                     </Form.Item>
                     <Form.Item
                     {...formItemLayout}
                         name="papertime"
                         label="考卷时长"
                     >
-                        <Input />
+                        <Input onChange={(e) => {this.setState({papertime: e.target.value})}}/>
                     </Form.Item>
                     <Form.Item
                     {...formItemLayout}
                         name="paperpassword"
                         label="考卷密码"
                     >
-                        <Input />
+                        <Input onChange={(e) => {this.setState({paperpassword: e.target.value})}}/>
                     </Form.Item>
                     <Form.Item
                         {...addButtonLayout}
@@ -442,8 +497,8 @@ class CreateTest extends Component{
                                                 rules={[{required: true}]}
                                             >
                                                 <Radio.Group onChange={(e) => this.handleValueClick(e)}>
-                                                    <Radio value={"judgeTrue"}  key={"judgeAnswerTrue"}>√</Radio>
-                                                    <Radio value={"judgeFalse"}  key={"judgeAnswerFalse"}>×</Radio>
+                                                    <Radio value={"√"}  key={"judgeAnswerTrue"}>√</Radio>
+                                                    <Radio value={"×"}  key={"judgeAnswerFalse"}>×</Radio>
                                                 </Radio.Group>
                                             </Form.Item>
                                             <Form.Item
@@ -464,7 +519,7 @@ class CreateTest extends Component{
                                                 <TextArea placeholder="题目" onChange={(e) => this.handleTitleChange(e)}/>
                                             </Form.Item>
                                             <Form.Item
-                                                label="选项"
+                                                label="答案"
                                                 name="gapOption"
                                                 rules={[{ required: true, message: 'Please input your password!' }]}
                                                 style={{fontFamily:"monospace"}}
@@ -522,7 +577,56 @@ class CreateTest extends Component{
                         name="paperpreview"
                         label="考卷预览"
                     >
-                        <Input />
+                        <div ref={this.paperPreviewRef} className={style["paperPreview"]}>
+                            {
+                                this.state.paperPreviewValue.map((ele,i)=>{
+                                    if(ele.type === "singletype" || ele.type === "multitype"){
+                                    }
+                                    return (
+                                        <div className={style["paperPreviewQustion"]} key={"paperPreview"+i}>
+                                            <div>{i + 1}：
+                                            {ele.type === "singletype" ? "单选题" : ""}
+                                            {ele.type === "multitype" ? "多选题" : ""}
+                                            {ele.type === "judegtype" ? "判断题" : ""}
+                                            {ele.type === "gaptype" ? "填空题" : ""}
+                                            {ele.type === "shorttype" ? "简答题" : ""}
+                                            </div>
+                                            <div className={style["paperPreviewBlock"]}>
+                                                <div>题目：</div>
+                                                <div>{ele.title}</div>
+                                            </div>
+                                            {
+                                               (ele.type === "singletype" || ele.type === "multitype") ?
+                                               (<div className={style["paperPreviewBlock"]}>
+                                                    <div>选项：</div>
+                                                    <div>
+                                                        {ele.option.map((el,i) => {return(<p key={i}>{String.fromCharCode(65 + i*1) + "：" + el}</p>)})}
+                                                    </div>
+                                                </div>)
+                                                :""
+                                            }
+                                            <div className={style["paperPreviewBlock"]}>
+                                                <div>答案：</div>
+                                                {
+                                                    ele.type !== "gaptype" 
+                                                    ? (<div>{ele.answer}</div>)
+                                                    : (<div>
+                                                        {ele.option.map((el,i) => {return(<p key={i}>{String.fromCharCode(65 + i*1) + "：" + el}</p>)})}
+                                                      </div>)
+                                                }
+                                            </div>
+                                            <div className={style["paperPreviewBlock"]}>
+                                                <div>解析：</div>
+                                                <div>{ele.analyze}</div>
+                                            </div>
+                                            <div className={style["paperPreviewBlock"]}>
+                                                <Button onClick={(i) => this.deletePreviewQustion(i)}>删除</Button>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
                     </Form.Item>
                     <Form.Item
                         {...addButtonLayout}

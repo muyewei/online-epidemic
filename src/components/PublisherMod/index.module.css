@@ -1,0 +1,14 @@
+.paperPreview{
+    border: 1px solid black;
+    border-radius: 0.2px;
+    padding: 10px;
+}
+
+.paperPreviewQuestion{
+    
+}
+
+.paperPreviewBlock{
+    display: flex;
+    margin: 5px 0;
+}
