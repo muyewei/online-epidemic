@@ -123,8 +123,13 @@ class CreateTest extends Component{
         paperPreviewValue: textpreviewvalue,
         warning: ""
     };
+
+    componentDidMount(){
+        console.log("publishermoded mount: ", this.props)
+    }
     
     componentDidUpdate (preProps, preState) {
+        console.log("publishermoded update: ", this.props)
         // console.log("did update", preState, this.state)
         if(this.state.optiondefault === 1){
             let st = this.state[this.state.nowqusetiontype]
@@ -266,6 +271,17 @@ class CreateTest extends Component{
     }
     render() {
         const { visible, loading } = this.state;
+
+        const submitPaper = {
+            papername: this.state.papername.replace(/(^\s*)|(\s*$)/g, ""),
+            paperbrief: this.state.paperbrief.replace(/(^\s*)|(\s*$)/g, ""),
+            paperstyle: this.state.paperstyle.replace(/(^\s*)|(\s*$)/g, ""),
+            papertime: this.state.papertime.replace(/(^\s*)|(\s*$)/g, ""),
+            paperpassword: this.state.paperpassword.replace(/(^\s*)|(\s*$)/g, ""),
+            papervalue: JSON.stringify(this.state.paperPreviewValue).replace(/(^\s*)|(\s*$)/g, ""),
+            paperdate: "",
+            user_account: this.props.username.replace(/(^\s*)|(\s*$)/g, "") 
+        }
         const menu = (
             <Menu onClick={(item)=>this.handleMenuClick(item)}>
                 <Menu.Item key="singleq" icon={<UserOutlined />}>
@@ -285,9 +301,25 @@ class CreateTest extends Component{
                 </Menu.Item>
             </Menu>
         );
+        const onFinish = (values) => {
+            console.log("success")
+            this.axios.post("/users/paper/onloadPaper", {paper: submitPaper})
+            .then((res) => {
+                console.log("SUCESS SUBMIT: ", res.data)
+            })
+        }
+        const onFinishFailed = (values) => {
+            console.log("fail: ", submitPaper)
+            this.axios.post("/users/paper/onloadPaper", {paper: submitPaper})
+            .then((res) => {
+                console.log("asdlsadkj: ", res.data)
+            })
+        }
       return (
             <div style={{width: "100%",margin: "50px auto"}}>
                 <Form 
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
                     {...formItemLayout}
@@ -632,8 +664,9 @@ class CreateTest extends Component{
                         {...addButtonLayout}
                         name="paperaddquestion"
                     >
-                        <Button  htmlType="submit" type="primary">保存</Button>
+                        <Button type="primary">保存</Button>
                         <Button
+                            htmlType="submit" 
                             style={{
                                 margin: '0 10px',
                             }}
@@ -654,7 +687,7 @@ export default class PublisherMod extends Component {
     render() {
         return (
             <div className="">
-                    <CreateTest key="createTest"></CreateTest>
+                    <CreateTest key="createTest" username={this.props.username} paperno={this.props.paperno}></CreateTest>
             </div>
         )
     }

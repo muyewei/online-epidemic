@@ -1,0 +1,40 @@
+.changepassword{
+    margin: auto;
+    padding: 50px;
+    max-width: 600px;
+    min-width: 200px;
+    width: 60%;
+    border: 1px solid #DDD;
+    border-radius: 2px;
+}
+
+.changepassword div{
+    width: 80%;
+    margin: auto;
+}
+
+.changepassword span{
+
+}
+
+.changepassword input{
+    border: 1px solid #DDD;
+    padding: 0px 5px;
+    height: 40px;
+}
+
+.changepassword button{
+    margin-top: 20px;
+    background-color: rgb(116, 181, 255);
+    width: 100px;
+    height: 50px;
+    transition: all 0.2s linear;
+}
+
+.changepassword button:hover{
+    background-color: rgb(41, 116, 202);
+}
+
+.changepassword button:focus{
+    outline: none;
+}

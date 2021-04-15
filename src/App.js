@@ -46,7 +46,7 @@ class App extends React.Component {
               </header>
             </Route>
           </Switch>
-        <main>
+        <main style={{ width: "100%", height: "100%" }}>
           <Switch>
             <Route path="/login" component={ Login } />
             <Route path="/register" component={ Register } />

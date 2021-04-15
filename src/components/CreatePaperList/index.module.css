@@ -1,0 +1,23 @@
+.papertop{
+    display: flex;
+    padding-left: 40px;
+}
+.papertop_input label{
+    padding: 0 15px;
+}
+.papertop_input input{
+    border: none;
+    height: 30px;
+    padding: 10px;
+    border: rgb(207, 207, 207) 1px solid;
+}
+
+.papertop_input input:hover{
+    border-color: rgb(121, 121, 121);
+}
+
+.papertop_input input:focus{
+    outline: none;
+    border-color: rgb(207, 207, 207);
+    box-shadow: 0px 0px 2px 2px rgb(107, 182, 252);
+}

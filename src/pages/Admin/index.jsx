@@ -1,14 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import TopNav from "../../components/UserTopNav"
+import User from "../../components/User"
+// import TopNav from "../../components/UserTopNav"
 import './index.css'
 
 class Admin extends Component {
+    state = {
+        menu: [
+            {
+                "title": "用户列表",
+                "list": [{name:"个人信息",content: "show1"},{name:"更改密码",content: "show2"}]
+            },
+            {
+                "title": "试卷列表",
+                "list": [{name:"试卷列表",content: "show3"},{name:"创建试卷",content: "show4"},{name:"在线试卷",content: "show5"}]
+            },
+            {
+                "title": "题库",
+                "list": [{name:"题目列表",content: "show6"},{name:"创建题目",content: "show7"}]
+            }
+        ]
+    }
     render() {
         return (
-            <div>
-                <TopNav></TopNav>
-                admin
+            <div style={{height: '100%'}}>
+                <User username={ this.props.loginState.user } menu={ this.state.menu }></User>
             </div>
         )
     }

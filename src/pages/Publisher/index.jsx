@@ -8,11 +8,11 @@ class Publisher extends Component {
         menu: [
             {
                 "title": "用户展示",
-                "list": [{name:"show1",content: "show1"},{name:"show2",content: "show2"}]
+                "list": [{name:"个人信息",content: "show1"},{name:"更改密码",content: "show2"}]
             },
             {
                 "title": "卷库",
-                "list": [{name:"试卷列表",content: "show3"},{name:"创建试卷",content: "show4"},{name:"试卷草稿",content: "show5"}]
+                "list": [{name:"试卷列表",content: "show3"},{name:"创建试卷",content: "show4"},{name:"在线试卷",content: "show5"}]
             },
             {
                 "title": "题库",

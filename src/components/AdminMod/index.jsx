@@ -8,7 +8,7 @@ import styles from './index.module.css'
  * 
  * 顶部菜单栏
  */
-export default class User extends Component {
+export default class AdminMod extends Component {
     state = {
         listName: [],
         paperno: 0

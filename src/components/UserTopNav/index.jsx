@@ -23,7 +23,7 @@ export default class TopNav extends Component {
                 <div className={style["tn-logo"]}>
                     <Link to="/user/teacher">
                         <WindowsOutlined/>
-                        <span>在线考试系统</span>
+                        <span>问卷系统</span>
                     </Link>
                 </div>
                 <div className={style["tn-exit"]}>
@@ -31,9 +31,6 @@ export default class TopNav extends Component {
                 </div>
                 <div className={style["tn-user-icon"]}>
                     <TeamOutlined />
-                </div>
-                <div>
-                    <Link to="/index">主页</Link>
                 </div>
             </div>
         )

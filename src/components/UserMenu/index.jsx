@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-// import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import style from "./index.module.css"
 /**
  * 
@@ -33,7 +33,7 @@ export default class Menu extends Component {
 
     detailContent = (item,i) => {
         this.props.callListName({item,i})
-        console.log(item,i)
+        // console.log(item,i)
     }
     render() {
         return (
@@ -43,6 +43,9 @@ export default class Menu extends Component {
                     <i className={style["menu_list_icon"]} ></i> */}
                     <div className={style.userDetail}>{ this.props.username }</div>
                     <ul style={{"listStyle": "none"}}>
+                        <li  className={style["menu_list_block"]}>
+                            <Link to="/index" style={{display: "block",width:"100%",height:"100%"}}>主页</Link>
+                        </li>
                         {
                             this.props.menu.map((item) => {
                                 return (

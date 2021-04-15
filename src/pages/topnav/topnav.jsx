@@ -6,6 +6,9 @@ import { createCancelAction } from "../../redux/actions/login_action"
 
 
 class topnav extends Component {
+    componentDidMount(){
+        console.log("topnav: ", this.props.loginState)
+    }
     cancelAccount = () => {
         this.props.cancel({user: "visitor", identify: "visitor"})
     }
