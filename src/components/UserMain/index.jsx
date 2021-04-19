@@ -5,7 +5,8 @@ import { DoubleRightOutlined } from '@ant-design/icons';
 import PublisherMod from '../PublisherMod'
 import CreatePaperList from '../CreatePaperList'
 import UserInformation from "../UserInformation"
-import CreateTopicList from "../CreateTopicList"
+import CreateQuestionList from "../CreateQuestionList"
+import AdminOperation from "../AdminOperation"
 
 
 /**
@@ -18,7 +19,7 @@ export default class Main extends Component {
        ctp: false
     }
     componentDidMount(){
-        console.log("usermain props: ", this.props.operationPage)
+        // console.log("usermain props: ", this.props.operationPage)
     }
     componentDidUpdate(){
         console.log("usermain update: ", this.props)
@@ -32,8 +33,12 @@ export default class Main extends Component {
                 <div className={style["main_head"]}>
                     <DoubleRightOutlined /> <span>主页{this.props.listName[0] ? " / " + this.props.listName[0] : ""}{this.props.listName[1] ? " / " + this.props.listName[1] : ""}</span>
                     {
+                        this.props.identify === "admin" &&
+                        <div>管理员模块</div>
+                    }
+                    {
                         this.props.operationPage === "创建试卷"  &&
-                        <PublisherMod username={this.props.username} paperno={this.props.paperno}></PublisherMod>
+                        <PublisherMod username={this.props.username} account={this.props.account} paperno={this.props.paperno}></PublisherMod>
                     }
                     {
                         this.props.operationPage === "试卷列表"  &&
@@ -45,7 +50,11 @@ export default class Main extends Component {
                     }
                     {
                         (this.props.operationPage === "创建题目" || this.props.operationPage === "题目列表")  &&
-                        <CreateTopicList username={this.props.username} type={this.props.operationPage}></CreateTopicList>
+                        <CreateQuestionList username={this.props.username} account={this.props.account} type={this.props.operationPage}></CreateQuestionList>
+                    }
+                    {
+                        this.props.identify === "admin" &&
+                        <AdminOperation operationPage={this.props.operationPage}></AdminOperation>
                     }
                 </div>
             </div>

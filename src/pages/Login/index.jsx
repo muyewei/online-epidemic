@@ -14,8 +14,8 @@ import { Link } from "react-router-dom"
 
 class Login extends Component {
     state = {
-        username: "control123",
-        password: "control123"
+        username: "admin123",
+        password: "admin123"
     }
     componentDidMount() {
         if (this.props.loginState.user !== "visitor") {
@@ -37,7 +37,8 @@ class Login extends Component {
                 let exp = new Date();    
                 exp.setTime(exp.getTime() + 60 * 60 * 1000);
                 document.cookie = "token=" + res.data.token + ";expires=" + exp.toGMTString() + ";path=/"
-                this.props.login({user: res.data.user, identify: res.data.identify})
+                console.log("login post: ", res.data)
+                this.props.login({user: res.data.user, identify: res.data.identify, account: res.data.account})
                 this.props.history.push(`/index`)
         })
     }

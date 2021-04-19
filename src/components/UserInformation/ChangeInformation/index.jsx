@@ -7,7 +7,8 @@ export default class ChangeInformation extends Component{
     repeatPassword = React.createRef()
     state = {
         repeat: "none",
-        warnword: ""
+        warnword: "",
+        username: ""
     }
     render(){
         return (
@@ -29,7 +30,7 @@ export default class ChangeInformation extends Component{
                     <div>
                         <div>
                             <p>用户名</p>
-                            <input type="text" value={this.props.username}/>
+                            <input type="text" placeholder={this.props.username} onChange={e=>this.setState({username: e.target.value})}/>
                         </div>
                         <div>
                             <button>更新</button>

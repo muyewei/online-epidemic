@@ -10,6 +10,7 @@ class topnav extends Component {
         console.log("topnav: ", this.props.loginState)
     }
     cancelAccount = () => {
+        this.axios.get("/users/account/cancel",{params:this.props.loginState})
         this.props.cancel({user: "visitor", identify: "visitor"})
     }
     render() {

@@ -4,6 +4,9 @@ import User from "../../components/User"
 import './index.css'
 
 class Publisher extends Component {
+    componentDidMount(){
+        console.log(this.props)
+    }
     state = {
         menu: [
             {
@@ -23,7 +26,7 @@ class Publisher extends Component {
     render() {
         return (
             <div style={{height: '100%'}}>
-                <User username={ this.props.loginState.user } menu={ this.state.menu }></User>
+                <User username={ this.props.loginState.user } account={ this.props.loginState.account } menu={ this.state.menu }></User>
             </div>
         )
     }

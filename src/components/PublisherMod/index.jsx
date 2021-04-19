@@ -95,7 +95,7 @@ const textpreviewvalue = [
 const {TextArea} = Input
 
 class CreateTest extends Component{
-
+    formRef = React.createRef()
     paperPreviewRef = React.createRef()
 
     state = {
@@ -104,6 +104,7 @@ class CreateTest extends Component{
         defaultquestion: "选择题目",
         optiondefault: 0,
         optiondefaultValue: [],
+        paperno: 0,
         papername: "123123",
         paperbrief: "",
         paperstyle: "",
@@ -125,11 +126,18 @@ class CreateTest extends Component{
     };
 
     componentDidMount(){
-        console.log("publishermoded mount: ", this.props)
+        // console.log("publishermoded mount: ", this.props)
+        if(this.props.paperno !== 0){
+            this.axios.get("/users/paper/getPaper?paperno="+this.props.paperno)
+            .then((res)=>{
+                console.log("PublisherMode DIDmount : ", res.data[0])
+                this.formRef.current.setFieldsValue(res.data[0])
+            })
+        }
     }
     
     componentDidUpdate (preProps, preState) {
-        console.log("publishermoded update: ", this.props)
+        // console.log("publishermode update: ", this.props)
         // console.log("did update", preState, this.state)
         if(this.state.optiondefault === 1){
             let st = this.state[this.state.nowqusetiontype]
@@ -303,23 +311,24 @@ class CreateTest extends Component{
         );
         const onFinish = (values) => {
             console.log("success")
-            this.axios.post("/users/paper/onloadPaper", {paper: submitPaper})
+            this.axios.post("/users/paper/onloadPaper", {paper: submitPaper,paperno: this.state.paperno})
             .then((res) => {
                 console.log("SUCESS SUBMIT: ", res.data)
             })
         }
         const onFinishFailed = (values) => {
             console.log("fail: ", submitPaper)
-            this.axios.post("/users/paper/onloadPaper", {paper: submitPaper})
-            .then((res) => {
-                console.log("asdlsadkj: ", res.data)
-            })
+            // this.axios.post("/users/paper/onloadPaper", {paper: submitPaper,paperno: this.state.paperno})
+            // .then((res) => {
+            //     console.log("asdlsadkj: ", res.data)
+            // })
         }
       return (
             <div style={{width: "100%",margin: "50px auto"}}>
                 <Form 
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
+                    ref={this.formRef}
                 >
                     <Form.Item
                     {...formItemLayout}
@@ -330,6 +339,7 @@ class CreateTest extends Component{
                                 required: true,
                             },
                         ]}
+                        values="123123123"
                     >
                         <Input onChange={(e) => {this.setState({papername: e.target.value})}}/>
                     </Form.Item>
@@ -577,7 +587,7 @@ class CreateTest extends Component{
                                     <div className="short"  style={{display: this.state.defaultquestion === "简答题" ? "block" : "none"}}>
                                     <Form>
                                             <Form.Item
-                                                name="gapTitle"
+                                                name="shortTitle"
                                                 label="题目"
                                                 rules={[{ required: true}]}
                                             >
@@ -592,7 +602,7 @@ class CreateTest extends Component{
                                                 <TextArea onChange={(e) => this.handleValueClick(e)}></TextArea>
                                             </Form.Item>
                                             <Form.Item
-                                                name="gapAnalyze"
+                                                name="shortAnalyze"
                                                 label="解析"
                                             >
                                                 <TextArea onChange={(e) => this.handleAnalyzeChange(e)}></TextArea>

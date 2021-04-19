@@ -17,10 +17,12 @@ export default class User extends Component {
         this.setState({listName: [item.item,item.i.name]})
     }
     ctp = (paperno) =>{
-        this.setState({paperno: paperno})
+        let ln = this.state.listName
+        ln[1] = "创建试卷"
+        this.setState({paperno: paperno, listName: ln})
     }
     render() {
-        console.log('user')
+        // console.log('user')
         return (
             <>
                 <div className={styles.top}>
@@ -31,9 +33,9 @@ export default class User extends Component {
                         <UserMenu username={this.props.username} menu={this.props.menu} callListName={this.checkListName}></UserMenu>
                     </div>
                     <div className={styles.main}>
-                        <UserMain listName={this.state.listName} username={this.props.username} paperno={this.state.paperno} operationPage={this.state.listName[1]} ctp={(paperno) => this.ctp(paperno)}></UserMain>
-                    </div></div>
-
+                        <UserMain identify={this.props.identify} listName={this.state.listName} account={this.props.account} username={this.props.username} paperno={this.state.paperno} operationPage={this.state.listName[1]} ctp={(paperno) => this.ctp(paperno)}></UserMain>
+                    </div>
+                </div>
             </>
         )
     }

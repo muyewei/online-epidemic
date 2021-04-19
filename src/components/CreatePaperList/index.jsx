@@ -102,8 +102,12 @@ class PaperList extends Component{
       this.setState({ searchText: '' });
     };  
 
-    handleDelete = (paperno) => {
-      console.log("handleDelete: ", paperno)
+    handleDelete = (record) => {
+      console.log("handleDelete: ", record)
+      this.axios.get("/users/paper/deletepaper?username="+this.props.username+"&paperno="+record.paperno+"&papername="+record.papername)
+      .then(res=>{
+        console.log("deletepaper: ",res)
+      })
     }
 
     handlePaperEdit = (paperno) => {
@@ -165,11 +169,12 @@ class PaperList extends Component{
               key: 'papercontrol',
               render: (_, record) => 
               <>
-                <Popconfirm title="确认删除?" onConfirm={() => this.handleDelete(record.key)}>
-                  <Button danger>删除</Button>
+                <Popconfirm title="确认删除?" onConfirm={() => this.handleDelete(record)}>
+                  <Button danger style={{marginLeft: "5px"}}>删除</Button>
                 </Popconfirm>
                 <Button type="primary" style={{marginLeft: "5px"}} onClick={() => this.handlePaperEdit(record.key)}>编辑</Button>
-                <Button type="dashed" style={{marginLeft: "5px"}}>上传</Button>
+                <Button type="dashed" style={{marginLeft: "5px"}}>开放使用</Button>
+                <Button type="dashed" style={{marginLeft: "5px"}}>禁止使用</Button>
               </>,
             }
           ];

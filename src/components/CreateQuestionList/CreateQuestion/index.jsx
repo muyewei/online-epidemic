@@ -46,12 +46,11 @@ const shorttype = {
 const {TextArea} = Input
 
 
-export default class CreateTopic extends Component {
-    paperPreviewRef = React.createRef()
+export default class Createquestion extends Component {
+
+    questionSubjectRef = React.createRef()
 
     state = {
-        loading: false,
-        visible: false,
         defaultquestion: "选择题目",
         optiondefault: 0,
         optiondefaultValue: [],
@@ -119,11 +118,11 @@ export default class CreateTopic extends Component {
     }
 
     componentDidMount(){
-        console.log("publishermoded mount: ", this.props)
+        console.log("Createquestion mount: ", this.props)
     }
     
     componentDidUpdate (preProps, preState) {
-        console.log("publishermoded update: ", this.props)
+        // console.log("createquestion update: ", this.props)
         // console.log("did update", preState, this.state)
         if(this.state.optiondefault === 1){
             let st = this.state[this.state.nowqusetiontype]
@@ -154,6 +153,58 @@ export default class CreateTopic extends Component {
             }
         }
     }
+
+    handleOk = () => {
+        if(this.state.nowqusetiontype === ""){
+            console.log(this.questionSubjectRef.current.input.value)
+            alert("请先选择题目")
+            return
+        }
+        let warningsingle = ""
+        let st = this.state[this.state.nowqusetiontype]
+        if(st.title === ""){
+            warningsingle += "题目 · "
+        }
+        if(this.state.nowqusetiontype === "singletype" || this.state.nowqusetiontype === "multitype" || this.state.nowqusetiontype === "gaptype"){
+            for (let index = 0; index < st.option.length; index++) {
+                const element = st.option[index];
+                if(element === ""){
+                    warningsingle += "选项 · "
+                }
+                break
+            }
+            if(this.state.nowqusetiontype !== "gaptype"){
+                for (let index = 0; index < st.answer.length; index++) {
+                    const element = st.answer[index];
+                    if(element === ""){
+                        warningsingle += "答案 · "
+                    }
+                    break
+                }
+            }
+        }
+        if(this.state.nowqusetiontype === "judgetype" || this.state.nowqusetiontype === "shorttype"){
+            if(st.answer === ""){
+                warningsingle += "答案 · "
+            }
+        }
+        
+        if(warningsingle !== ""){
+            warningsingle += "不能为空"
+        }
+        console.log("okokok submit: ", this.state.nowqusetiontype, this.state[this.state.nowqusetiontype],this.questionSubjectRef.current.input.value,this.props.account)
+        this.axios.post("/users/question/uploadQuestion",{
+            title: this.state[this.state.nowqusetiontype].title,
+            type: this.state.nowqusetiontype,
+            value: JSON.stringify(this.state[this.state.nowqusetiontype]),
+            subject: this.questionSubjectRef.current.input.value,
+            user_acconut: this.props.username
+        }).then((res)=>{
+            console.log(res.data[0])
+        })
+        this.setState({warning: warningsingle})
+    };
+
     render() {
         const menu = (
             <Menu onClick={(item)=>this.handleMenuClick(item)}>
@@ -175,14 +226,16 @@ export default class CreateTopic extends Component {
             </Menu>
         );
         return (
-            <div className={style["createTopic"]}>
-                <div>
+            <div className={style["createquestion"]}>
+                <div style={{padding:"10px"}}>
                     <div>
                         <Dropdown overlay={menu}>
                             <Button className="ant-dropdown-link">
                                 {this.state.defaultquestion} <DownOutlined />
                             </Button>
                         </Dropdown>
+                        <br/>
+                        <Input addonBefore="类型" style={{width: "150px"}} ref={ this.questionSubjectRef }/>
                     </div>
                     <div>
                         <div className="single" style={{ display: this.state.defaultquestion === "单选题" ? "block" : "none" }}>
@@ -247,7 +300,7 @@ export default class CreateTopic extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="选项"
-                                    name="multiOption"
+                                    // name="multiOption"
                                     rules={[{ required: true, message: 'Please input your password!' }]}
                                     style={{ fontFamily: "monospace" }}
                                 >
@@ -326,7 +379,7 @@ export default class CreateTopic extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="答案"
-                                    name="gapOption"
+                                    // name="gapOption"
                                     rules={[{ required: true, message: 'Please input your password!' }]}
                                     style={{ fontFamily: "monospace" }}
                                 >
@@ -351,7 +404,7 @@ export default class CreateTopic extends Component {
                         <div className="short" style={{ display: this.state.defaultquestion === "简答题" ? "block" : "none" }}>
                             <Form>
                                 <Form.Item
-                                    name="gapTitle"
+                                    name="shortTitle"
                                     label="题目"
                                     rules={[{ required: true }]}
                                 >
@@ -366,13 +419,14 @@ export default class CreateTopic extends Component {
                                     <TextArea onChange={(e) => this.handleValueClick(e)}></TextArea>
                                 </Form.Item>
                                 <Form.Item
-                                    name="gapAnalyze"
+                                    name="shortAnalyze"
                                     label="解析"
                                 >
                                     <TextArea onChange={(e) => this.handleAnalyzeChange(e)}></TextArea>
                                 </Form.Item>
                             </Form>
                         </div>
+                        <div><Button onClick={() => this.handleOk()}>123</Button></div>
                         <div style={{ display: this.state.warning === "" ? "none" : "block", color: "red" }}>{this.state.warning}</div>
                     </div>
                 </div>

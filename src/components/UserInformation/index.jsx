@@ -6,7 +6,6 @@ export default class UserInformation extends Component{
     render(){
         return (
             <div>
-                123
                 {
                     this.props.type === "个人信息" &&
                     <Ci username={this.props.username} type={this.props.operationPage}></Ci>
