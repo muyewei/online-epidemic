@@ -7,7 +7,7 @@ import MD5 from "crypto-js/md5"
 import SHA1 from "crypto-js/sha1"
 import AES from "crypto-js/aes"
 import React, { Component } from 'react'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './index.css'
 import { Link } from "react-router-dom"
@@ -33,13 +33,20 @@ class Login extends Component {
         password = AES.encrypt(password, secretKey).toString()
         this.axios.post("/users/account/login", {username,password})
             .then((res) => {
-                //设置cookie 延迟保存10s
-                let exp = new Date();    
-                exp.setTime(exp.getTime() + 60 * 60 * 1000);
-                document.cookie = "token=" + res.data.token + ";expires=" + exp.toGMTString() + ";path=/"
-                console.log("login post: ", res.data)
-                this.props.login({user: res.data.user, identify: res.data.identify, account: res.data.account})
-                this.props.history.push(`/index`)
+                if(res.data.msg === "登录失败"){
+                    message.error("账号或密码错误")
+                }else if(res.data.msg === "登录成功"){
+                    //设置cookie 延迟保存10s
+                    message.success("登录成功")
+                    let exp = new Date();    
+                    exp.setTime(exp.getTime() + 60 * 60 * 1000);
+                    document.cookie = "token=" + res.data.token + ";expires=" + exp.toGMTString() + ";path=/"
+                    console.log("login post: ", res.data)
+                    this.props.login({user: res.data.user, identify: res.data.identify, account: res.data.account})
+                    this.props.history.push(`/index`)
+                }else{
+                    message.warn("未知错误，请重新启动浏览器")
+                }
         })
     }
     render() {

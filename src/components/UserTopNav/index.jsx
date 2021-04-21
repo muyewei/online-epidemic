@@ -21,7 +21,7 @@ export default class TopNav extends Component {
         return (
             <div className={style["top-nav"]}>
                 <div className={style["tn-logo"]}>
-                    <Link to="/user/teacher">
+                    <Link to="/user/userjump">
                         <WindowsOutlined/>
                         <span>问卷系统</span>
                     </Link>

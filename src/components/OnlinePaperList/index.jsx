@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Table, Tag, Space, Button, Popconfirm, Input, message } from 'antd';
+import { Table, Tag, Space, Button, Input, message } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
@@ -7,23 +7,25 @@ import style from "./index.module.css";
 
 class PaperList extends Component{
     componentDidMount(){
-      this.axios.get("/users/paper/getPaperList?user=" + this.props.username)
-      .then((res) => {
-        for(let i in res.data){
-          res.data[i].key = res.data[i].paperno
-        }
-        console.log("Get PaperList: ", res.data)
-        this.setState({
-          paperlist: res.data
-        })
-      })
+      this.getPaperOpenList()
     }
     state = {
         papername: "",
         papertype: "",
         paperlist: []
     }
-
+    getPaperOpenList = ()=>{
+        this.axios.get("/users/paper/getPaperOpenList?user=" + this.props.username)
+      .then((res) => {
+        for(let i in res.data){
+          res.data[i].key = res.data[i].paperno
+        }
+        console.log("Get PaperOpenList: ", res.data)
+        this.setState({
+          paperlist: res.data
+        })
+      })
+    }
     getColumnSearchProps = dataIndex => ({
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
@@ -31,7 +33,7 @@ class PaperList extends Component{
             ref={node => {
               this.searchInput = node;
             }}
-            placeholder={`输入 ${dataIndex}`}
+            placeholder={`查询 ${dataIndex}`}
             value={selectedKeys[0]}
             onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
             onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
@@ -45,11 +47,11 @@ class PaperList extends Component{
               size="small"
               style={{ width: 90 }}
             >
-              寻找
-                </Button>
+              查询
+            </Button>
             <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-              重置
-                </Button>
+              充值
+            </Button>
           </Space>
         </div>
       ),
@@ -76,39 +78,14 @@ class PaperList extends Component{
         ),
     });
 
-    handleSearch = (selectedKeys, confirm, dataIndex) => {
-      confirm();
-      this.setState({
-        searchText: selectedKeys[0],
-        searchedColumn: dataIndex,
-      });
-    };
-  
-    handleReset = clearFilters => {
-      clearFilters();
-      this.setState({ searchText: '' });
-    };  
-
-    handleDelete = (record) => {
-      console.log("handleDelete: ", record)
-      this.axios.get("/users/paper/deletepaper?username="+this.props.username+"&paperno="+record.paperno+"&papername="+record.papername)
+    handlePaperClose = (paperno) =>{
+      this.axios.get("/users/paper/setpaperclose?paperno="+paperno)
       .then(res=>{
-        console.log("deletepaper: ",res)
-      })
-    }
-
-    handlePaperEdit = (paperno) => {
-      this.props.createToPublish(paperno)
-      console.log("handlePaperEdit: ", paperno)
-    }
-
-    handlePaperOpen = (paperno) =>{
-      this.axios.get("/users/paper/setpaperopen?paperno="+paperno)
-      .then(res=>{
-        if(res.data === "setpaperopen Success"){
+        if(res.data === "setpaperclose Success"){
+          this.getPaperOpenList()
           message.success("更改成功")
         }else{
-          message.warn("未知错误...")
+          message.warn("出错了...")
         }
       })
     }
@@ -137,9 +114,9 @@ class PaperList extends Component{
               ...this.getColumnSearchProps('paperstyle')
             },
             {
-              title: '简介',
-              dataIndex: 'paperbrief',
-              key: 'paperbrief',
+              title: '浏览次数',
+              dataIndex: 'visitnum',
+              key: 'visitnum',
               render: text => <span>{text}</span>,
             },
             {
@@ -167,11 +144,7 @@ class PaperList extends Component{
               key: 'papercontrol',
               render: (_, record) => 
               <>
-                <Popconfirm title="确认删除?" onConfirm={() => this.handleDelete(record)}>
-                  <Button danger style={{marginLeft: "5px"}}>删除</Button>
-                </Popconfirm>
-                <Button type="primary" style={{marginLeft: "5px"}} onClick={() => this.handlePaperEdit(record.key)}>编辑</Button>
-                <Button type="dashed" style={{marginLeft: "5px"}} onClick={() => this.handlePaperOpen(record.paperno)}>开放使用</Button>
+                <Button type="dashed" style={{marginLeft: "5px"}} onClick={() => this.handlePaperClose(record.paperno)}>禁止使用</Button>
               </>,
             }
           ];
@@ -185,7 +158,7 @@ class PaperList extends Component{
 }
 
 
-export default class createPaperList extends Component{
+export default class OnlinePaperList extends Component{
     componentDidMount(){
     }
     createToPublish = (paperno) => {

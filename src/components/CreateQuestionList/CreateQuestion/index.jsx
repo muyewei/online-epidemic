@@ -49,6 +49,11 @@ const {TextArea} = Input
 export default class Createquestion extends Component {
 
     questionSubjectRef = React.createRef()
+    singletypeRef = React.createRef()
+    multitypeRef = React.createRef()
+    judgetypeRef = React.createRef()
+    gaptypeRef = React.createRef()
+    shorttypeRef = React.createRef()
 
     state = {
         defaultquestion: "选择题目",
@@ -118,7 +123,17 @@ export default class Createquestion extends Component {
     }
 
     componentDidMount(){
-        console.log("Createquestion mount: ", this.props)
+        // console.log("Createquestion mount: ", this.props)
+        this.axios.get("/users/question/getquestion?questionno="+this.props.questionno)
+        .then(res=>{
+            let type = res.data[0].type === "singletype" ? "单选题" :
+            res.data[0].type === "muilttype" ? "多选题" :
+            res.data[0].type === "judgetype" ? "判断题" :
+            res.data[0].type === "gaptype" ? "填空题" :
+            res.data[0].type === "shorttype" ? "简答题" : ""
+            this[res.data[0].type+"Ref"].current.setFieldsValue(JSON.parse(res.data[0].value))
+            this.setState({defaultquestion: type,[res.data[0].type]: JSON.parse(res.data[0].value)})
+        })
     }
     
     componentDidUpdate (preProps, preState) {
@@ -204,7 +219,6 @@ export default class Createquestion extends Component {
         })
         this.setState({warning: warningsingle})
     };
-
     render() {
         const menu = (
             <Menu onClick={(item)=>this.handleMenuClick(item)}>
@@ -239,7 +253,9 @@ export default class Createquestion extends Component {
                     </div>
                     <div>
                         <div className="single" style={{ display: this.state.defaultquestion === "单选题" ? "block" : "none" }}>
-                            <Form>
+                            <Form
+                            ref={this.singletypeRef}
+                            >
                                 <Form.Item
                                     name="singeTitle"
                                     label="题目"
@@ -290,7 +306,9 @@ export default class Createquestion extends Component {
                             </Form>
                         </div>
                         <div className="multi" style={{ display: this.state.defaultquestion === "多选题" ? "block" : "none" }}>
-                            <Form>
+                            <Form
+                            ref={this.multitypeRef}
+                            >
                                 <Form.Item
                                     name="multiTitle"
                                     label="题目"
@@ -342,7 +360,9 @@ export default class Createquestion extends Component {
                             </Form>
                         </div>
                         <div className="judge" style={{ display: this.state.defaultquestion === "判断题" ? "block" : "none" }}>
-                            <Form>
+                            <Form
+                            ref={this.judgetypeRef}
+                            >
                                 <Form.Item
                                     name="judgeTitle"
                                     label="题目"
@@ -369,7 +389,9 @@ export default class Createquestion extends Component {
                             </Form>
                         </div>
                         <div className="gap" style={{ display: this.state.defaultquestion === "填空题" ? "block" : "none" }}>
-                            <Form>
+                            <Form
+                            ref={this.gaptypeRef}
+                            >
                                 <Form.Item
                                     name="gapTitle"
                                     label="题目"
@@ -402,7 +424,9 @@ export default class Createquestion extends Component {
                             </Form>
                         </div>
                         <div className="short" style={{ display: this.state.defaultquestion === "简答题" ? "block" : "none" }}>
-                            <Form>
+                            <Form
+                                ref={this.shorttypeRef}
+                            >
                                 <Form.Item
                                     name="shortTitle"
                                     label="题目"
@@ -426,7 +450,7 @@ export default class Createquestion extends Component {
                                 </Form.Item>
                             </Form>
                         </div>
-                        <div><Button onClick={() => this.handleOk()}>123</Button></div>
+                        <div><Button onClick={() => this.handleOk()}>提交</Button></div>
                         <div style={{ display: this.state.warning === "" ? "none" : "block", color: "red" }}>{this.state.warning}</div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
 import style from './index.module.css'
-import { Form, Input, Button, Select, Modal, Menu, Dropdown, Radio, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Button, Modal, Menu, Dropdown, Radio, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 
 const formItemLayout = {
@@ -629,7 +629,7 @@ class CreateTest extends Component{
                                             <div>{i + 1}：
                                             {ele.type === "singletype" ? "单选题" : ""}
                                             {ele.type === "multitype" ? "多选题" : ""}
-                                            {ele.type === "judegtype" ? "判断题" : ""}
+                                            {ele.type === "judgetype" ? "判断题" : ""}
                                             {ele.type === "gaptype" ? "填空题" : ""}
                                             {ele.type === "shorttype" ? "简答题" : ""}
                                             </div>
