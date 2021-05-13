@@ -9,13 +9,12 @@ import {
 import MD5 from "crypto-js/md5"
 import SHA1 from "crypto-js/sha1"
 import AES from "crypto-js/aes"
-import { UserOutlined, LockOutlined, MessageOutlined, KeyOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, MessageOutlined, KeyOutlined, BookOutlined } from "@ant-design/icons";
 import "./index.css"
 
 class Register extends Component {
     state = {
-        checkaccount: "",
-        checkusername: ""
+        checkuseraccount: ""
     }
     onFinish = (registerInput) => {
         let secretKey = "weibiao"
@@ -23,11 +22,12 @@ class Register extends Component {
         let username = registerInput.username
         let password = SHA1(MD5(registerInput.password)).toString()
         password = AES.encrypt(password, secretKey).toString()
-
+        let studentclass = registerInput.studentclass || ""
         this.axios.post("/users/account/register", {
             useraccount,
             username,
-            password
+            password,
+            studentclass
         }).then(res => {
             if (res.data.msg === "success") {
                 console.log("success")
@@ -38,20 +38,11 @@ class Register extends Component {
                 // this.props.login(res.data.user)
                 this.props.history.push(`/login`)
             } else {
-                let checkres = {
-                    account: "",
-                    username: ""
+                if (res.data.checkuser.useraccount) {
+                    this.setState({
+                        checkuseraccount: "warning"
+                    })
                 }
-                if (res.data.checkuser.account) {
-                    checkres.account = "warning"
-                }
-                if (res.data.checkuser.username) {
-                    checkres.username = "warning"
-                }
-                this.setState({
-                    checkaccount: checkres.account,
-                    checkusername: checkres.username
-                })
                 console.log("fail")
             }
         })
@@ -64,12 +55,40 @@ class Register extends Component {
                     onFinish={this.onFinish}
                 >
                     <h1>注册账号</h1>
-                    <div>用户名：</div>
+                    <div>账号：</div>
                     <p></p>
                     <Form.Item
                         name="useraccount"
                         className="registeraccount"
-                        validateStatus={this.state.checkaccount}
+                        validateStatus={this.state.checkuseraccount}
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: "账号不能为空",
+                            },
+                            {
+                                min: 1,
+                                message: "账号过短",
+                            },
+                            {
+                                max: 20,
+                                message: "账号过长"
+                            },
+                            {
+                                message:"仅支持数字或字母",
+                                pattern: /^[0-9a-zA-Z]+$/
+                            }
+                        ]}
+                    >
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="账号"/>
+                    </Form.Item>
+                    <div>用户名：</div>
+                    <p></p>
+                    <Form.Item
+                        name="username"
+                        className="registerusername"
+                        validateStatus={this.state.checkusername}
                         hasFeedback
                         rules={[
                             {
@@ -81,42 +100,13 @@ class Register extends Component {
                                 message: "用户名过短",
                             },
                             {
-                                max: 20,
+                                max: 12,
                                 message: "用户名过长"
 
                             }
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-                    </Form.Item>
-                    <div>账号：</div>
-                    <p></p>
-                    <Form.Item
-                        name="username"
-                        className="registerusername"
-                        validateStatus={this.state.checkusername}
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: "账号不能为空",
-                            },
-                            {
-                                min: 6,
-                                message: "账号过短",
-                            },
-                            {
-                                max: 12,
-                                message: "账号过长"
-
-                            },
-                            {
-                                message:"仅支持数字或字母",
-                                pattern: /^[0-9a-zA-Z]+$/
-                            }
-                        ]}
-                    >
-                        <Input prefix={<MessageOutlined className="site-form-item-icon" />} placeholder="请输入6-12位数字或字母" />
+                        <Input prefix={<MessageOutlined className="site-form-item-icon" />}/>
                     </Form.Item>
                     <div>密码：</div>
                     <p></p>
@@ -168,8 +158,20 @@ class Register extends Component {
                     >
                         <Input.Password prefix={<KeyOutlined className="site-form-item-icon" />} placeholder="请重复输入密码" />
                     </Form.Item>
-                    <p style={{color: "red"}}>{this.state.checkaccount === "warning" ? "用户名已重复" : ""}</p>
-                    <p style={{color: "red"}}>{this.state.checkusername  === "warning" ? "账号已重复" : ""}</p>
+                    <div>输入班级：</div>
+                    <p></p>
+                    <Form.Item
+                        name="studentclass"
+                        rules={[
+                            {
+                                required: "true",
+                                message:"请输入班级"
+                            }
+                        ]}
+                    >
+                        <Input prefix={<BookOutlined className="site-form-item-icon" />} placeholder="请输入班级" />
+                    </Form.Item>
+                    <p style={{color: "red"}}>{this.state.checkuseraccount === "warning" ? "账号已重复" : ""}</p>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: "100%", height: "40px" }}>
                             注册

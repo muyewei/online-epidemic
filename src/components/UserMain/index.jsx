@@ -8,6 +8,7 @@ import OnlinePaperList from "../OnlinePaperList"
 import UserInformation from "../UserInformation"
 import CreateQuestionList from "../CreateQuestionList"
 import AdminOperation from "../AdminOperation"
+import LetterControl from '../LetterControl';
 
 
 /**
@@ -20,7 +21,7 @@ export default class Main extends Component {
        ctp: false
     }
     componentDidMount(){
-        // console.log("usermain props: ", this.props.operationPage)
+        // console.log("usermain props: ", this.props)
     }
     componentDidUpdate(){
         // console.log("usermain update: ", this.props)
@@ -42,7 +43,7 @@ export default class Main extends Component {
                     }
                     {
                         this.props.operationPage === "创建试卷"  &&
-                        <PublisherMod username={this.props.username} account={this.props.account} paperno={this.props.paperno}></PublisherMod>
+                        <PublisherMod username={this.props.username} useraccount={ this.props.useraccount } paperno={this.props.paperno}></PublisherMod>
                     }
                     {
                         this.props.operationPage === "试卷列表"  &&
@@ -53,16 +54,20 @@ export default class Main extends Component {
                         <OnlinePaperList username={this.props.username}></OnlinePaperList>
                     }
                     {
-                        (this.props.operationPage === "个人信息" || this.props.operationPage === "更改密码")  &&
-                        <UserInformation username={this.props.username} type={this.props.operationPage}></UserInformation>
+                        (this.props.operationPage === "信息详情" || this.props.operationPage === "更改密码")  &&
+                        <UserInformation login={this.props.login} identify={this.props.identify} useraccount={ this.props.useraccount } username={this.props.username} type={this.props.operationPage}></UserInformation>
+                    }
+                    {
+                        (this.props.operationPage === "发布文章" ||  this.props.operationPage === "文章列表")  &&
+                        <LetterControl username={this.props.username} useraccount={ this.props.useraccount }></LetterControl>
                     }
                     {
                         (this.props.operationPage === "创建题目" || this.props.operationPage === "题目列表")  &&
-                        <CreateQuestionList username={this.props.username} createToPublishQ={(questionno) => this.createToPublishQ(questionno)} account={this.props.account} type={this.props.operationPage}></CreateQuestionList>
+                        <CreateQuestionList username={this.props.username} createToPublishQ={(questionno) => this.createToPublishQ(questionno)} useraccount={this.props.useraccount} type={this.props.operationPage}></CreateQuestionList>
                     }
                     {
                         this.props.identify === "admin" &&
-                        <AdminOperation operationPage={this.props.operationPage}></AdminOperation>
+                        <AdminOperation username={ this.props.username } useraccount={ this.props.useraccount } operationPage={this.props.operationPage}></AdminOperation>
                     }
                 </div>
             </div>

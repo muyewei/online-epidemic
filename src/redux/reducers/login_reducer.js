@@ -1,4 +1,4 @@
-const initLoginState = {user: "visitor", identify: "visitor", account: "0"}
+const initLoginState = {username: "visitor", identify: "visitor", useraccount: "0"}
 export default function loginReducer(preState = initLoginState, action) {
     // console.log(action)
     const { type, data } = action

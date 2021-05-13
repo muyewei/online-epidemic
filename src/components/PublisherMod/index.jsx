@@ -61,35 +61,6 @@ const shorttype = {
 }
 
 const textpreviewvalue = [
-    {
-        analyze: "",
-        answer: "A",
-        option: ["123", "123123", "1231233", "12"],
-        optionlength: 4,
-        title: "123123",
-        type: "singletype"
-    },
-    {
-        analyze: "",
-        answer: ["A","B"],
-        option: ["123", "123123", "1231233", "12"],
-        optionlength: 4,
-        title: "123123",
-        type: "multitype"
-    },
-    {
-        analyze: "123123",
-        answer: "√",
-        title: "123213123",
-        type: "judgetype"
-    },
-    {
-        analyze: "",
-        option: ["123123", "123123123"],
-        optionlength: 2,
-        title: "123123",
-        type: "gaptype"
-    }
 ]
 
 const {TextArea} = Input
@@ -131,7 +102,18 @@ class CreateTest extends Component{
             this.axios.get("/users/paper/getPaper?paperno="+this.props.paperno)
             .then((res)=>{
                 console.log("PublisherMode DIDmount : ", res.data[0])
+                let value =  res.data[0].papervalue
+                let a = value.slice(1,-1).split(/\},/g)
+                let paperPreviewValue = []
+                for(let i in a){
+                    if(i*1 !== a.length-1){
+                        paperPreviewValue.push(JSON.parse(a[i]+"}"))
+                    }else{
+                        paperPreviewValue.push(JSON.parse(a[i]))
+                    }
+                }
                 this.formRef.current.setFieldsValue(res.data[0])
+                this.setState({paperPreviewValue,papertime: res.data[0].papertime,paperpassword:res.data[0].paperpassword})
             })
         }
     }
@@ -311,7 +293,7 @@ class CreateTest extends Component{
         );
         const onFinish = (values) => {
             console.log("success")
-            this.axios.post("/users/paper/onloadPaper", {paper: submitPaper,paperno: this.state.paperno})
+            this.axios.post("/users/paper/uploadPaper", {paper: submitPaper,paperno: this.state.paperno})
             .then((res) => {
                 console.log("SUCESS SUBMIT: ", res.data)
             })
@@ -674,9 +656,9 @@ class CreateTest extends Component{
                         {...addButtonLayout}
                         name="paperaddquestion"
                     >
-                        <Button type="primary">保存</Button>
                         <Button
                             htmlType="submit" 
+                            type="primary"
                             style={{
                                 margin: '0 10px',
                             }}

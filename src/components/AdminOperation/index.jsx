@@ -1,8 +1,8 @@
 import React, { Component } from "react"
-import { Table, Tag, Space, Button, Popconfirm, Input, message, Modal } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm, Input, message, Modal, Upload, Image } from 'antd';
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
-import style from "./index.module.css"
+import { SearchOutlined, UploadOutlined } from '@ant-design/icons';
+import style from "./index.module.css";
 
 class Allusers extends Component {
     usernameRef = React.createRef()
@@ -40,7 +40,6 @@ class Allusers extends Component {
                 console.log(data)
                 this.setState({ defaultdata: data, usedata: data, identify: i, page })
             })
-
     }
 
     filterAccount = () => {
@@ -68,15 +67,27 @@ class Allusers extends Component {
     tableChange = (pagination) => {
         this.getUsersList(pagination.current)
     }
+    deleteuser = (useraccount) =>{
+        this.axios.get("/users/admin/deleteuser?useraccount="+useraccount)
+        .then(()=>{
+            this.getUsersList(1)
+        })
+    }
+    changeIdentify = (identify,useraccount) =>{
+        this.axios.get("/users/admin/changeidentify?identify="+identify+"&useraccount="+useraccount)
+        .then(()=>{
+            this.getUsersList(1)
+        })
+    }
     render() {
         const columns = [
             {
-                title: '用户名',
-                dataIndex: 'user_account',
+                title: '账号',
+                dataIndex: 'useraccount',
                 render: text => <span>{text}</span>,
             },
             {
-                title: '账号',
+                title: '用户名',
                 className: 'column-money',
                 dataIndex: 'username',
                 align: 'right',
@@ -90,14 +101,14 @@ class Allusers extends Component {
                 dataIndex: 'operation',
                 render: (_, record) => (
                     <>
-                        <Button onClick={() => console.log("删除用户： ", record)} disabled={this.state.identify === "admin" ? true : false}>删除用户</Button>
+                        <Button onClick={() => this.deleteuser(record.useraccount)} disabled={this.state.identify === "admin" ? true : false}>删除用户</Button>
                         {
                             this.state.identify === "normal" &&
-                            <Button>设为发布者</Button>
+                            <Button onClick={()=>this.changeIdentify("publisher",record.useraccount)}>设为发布者</Button>
                         }
                         {
                             this.state.identify === "publisher" &&
-                            <Button>设为管理员</Button>
+                            <Button onClick={()=>this.changeIdentify("admin",record.useraccount)}>设为管理员</Button>
                         }
                     </>
                 )
@@ -198,12 +209,12 @@ class Alllog extends Component {
                 dataIndex: 'behaviorno'
             },
             {
-                title: '用户名',
-                dataIndex: 'user_account',
+                title: '账号',
+                dataIndex: 'useraccount',
                 render: text => <span>{text}</span>,
             },
             {
-                title: '账号',
+                title: '用户名',
                 className: 'column-money',
                 dataIndex: 'username',
                 align: 'right',
@@ -295,63 +306,63 @@ class Paq extends Component {
     }
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-          <div style={{ padding: 8 }}>
-            <Input
-              ref={node => {
-                this.searchInput = node;
-              }}
-              placeholder={`输入 ${dataIndex}`}
-              value={selectedKeys[0]}
-              onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-              style={{ width: 188, marginBottom: 8, display: 'block' }}
-            />
-            <Space>
-              <Button
-                type="primary"
-                onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                icon={<SearchOutlined />}
-                size="small"
-                style={{ width: 90 }}
-              >
-                寻找
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`输入 ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Space>
+                    <Button
+                        type="primary"
+                        onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{ width: 90 }}
+                    >
+                        寻找
                   </Button>
-              <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                重置
+                    <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                        重置
                   </Button>
-            </Space>
-          </div>
+                </Space>
+            </div>
         ),
         filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
         onFilter: (value, record) =>
-          record[dataIndex]
-            ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-            : '',
+            record[dataIndex]
+                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+                : '',
         onFilterDropdownVisibleChange: visible => {
-          if (visible) {
-            setTimeout(() => this.searchInput.select(), 100);
-          }
+            if (visible) {
+                setTimeout(() => this.searchInput.select(), 100);
+            }
         },
         render: text =>
-          this.state.searchedColumn === dataIndex ? (
-            <Highlighter
-              highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-              searchWords={[this.state.searchText]}
-              autoEscape
-              textToHighlight={text ? text.toString() : ''}
-            />
-          ) : (
-            text
-          ),
-      });
-    
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text ? text.toString() : ''}
+                />
+            ) : (
+                text
+            ),
+    });
+
     handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         this.setState({
-          searchText: selectedKeys[0],
-          searchedColumn: dataIndex,
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
         });
-      };
+    };
     handlePaperClose = (paperno) => {
         this.axios.get("/users/paper/setpaperclose?paperno=" + paperno)
             .then(res => {
@@ -386,6 +397,10 @@ class Paq extends Component {
         clearFilters();
         this.setState({ searchText: '' });
     };
+
+    handlePaperPreview = (paperno)=>{
+
+    }
 
     handleDelete = (record) => {
         console.log("handleDelete: ", record.questionno)
@@ -466,6 +481,7 @@ class Paq extends Component {
                         </Popconfirm>
                         <Button type="dashed" style={{ marginLeft: "5px" }} onClick={() => this.handlePaperOpen(record.paperno)}>开放使用</Button>
                         <Button type="dashed" style={{ marginLeft: "5px" }} onClick={() => this.handlePaperClose(record.paperno)}>禁止使用</Button>
+                        <Button type="primary" style={{ marginLeft: "5px" }} onClick={() => this.handlePaperPreview(record.paperno)}>预览</Button>
                     </>,
             }
         ]
@@ -596,6 +612,397 @@ class Paq extends Component {
         )
     }
 }
+//Issue notice
+class IssueNotice extends Component {
+    noticeRef = React.createRef()
+    spreadLinkRef = React.createRef()
+    spreadWordRef = React.createRef()
+    state = {
+        fileList: [],
+        thumburl: "",
+        noticelist: [],
+        extensionlist: [],
+        linklist:[]
+    }
+    componentDidMount(){
+        this.axios.get("/users/admin/getnoticeandextension")
+        .then(res=>{
+            let noticelist = res.data[0].noticelist
+            for(let i in noticelist){
+                noticelist[i].no = i * 1 +1
+                noticelist[i].key = "noticeno"+noticelist[i].noticeno
+            }
+            let extensionlist = res.data[1].extensionlist
+            for(let j in extensionlist){
+                extensionlist[j].no = j * 1 +1
+                extensionlist[j].key = "extensionno"+extensionlist[j].extensionno
+            }
+            this.setState({noticelist,extensionlist})
+        })
+    }
+    removeImg = (file) => {
+        console.log(file)
+    }
+    handleChangeImg = (e) => {
+        let thumburl = ""
+        let fileList = e.fileList.map(file => {
+            if (file.response) {
+                file.thumbUrl = file.response.thumburl
+                thumburl = file.response.thumburl
+            }
+            return file
+        })
+        console.log(fileList)
+        this.setState({fileList,thumburl})
+    }
+    //上传通知
+    uploadNotice = () => {
+        const {username,useraccount} = this.props
+        this.axios.post("/users/admin/uploadnotice",{
+            username,
+            useraccount,
+            word: this.noticeRef.current.input.value
+        }).then((result) => {
+            if(result.data.msg === "error"){
+                message.error("上传失败")
+            }else if(result.data.msg === "success"){
+                message.success("上传成功")
+            }
+            this.axios.get("/users/admin/getnotice")
+            .then(res=>{
+                let noticelist = res.data.data
+                for(let i in noticelist){
+                    noticelist[i].no = i * 1 +1
+                    noticelist[i].key = "noticeno"+noticelist[i].noticeno
+                }
+                this.setState({noticelist})
+            })
+        })
+    }
+    //上传页面推广
+    uploadExtension = () => {
+        const {username,useraccount} = this.props
+        this.axios.post("/users/admin/uploadextension",{
+            picturepath: this.state.thumburl,
+            word: this.spreadWordRef.current.input.value,
+            picturelink: this.spreadLinkRef.current.input.value,
+            username: username,
+            useraccount: useraccount
+        }).then((result) => {
+            if(result.data.msg === "error"){
+                message.error("上传失败")
+            }else if(result.data.msg === "success"){
+                message.success("上传成功")
+            }
+            this.axios.get("/users/admin/getextension")
+            .then(res=>{
+                let extensionlist = res.data.data
+                for(let i in extensionlist){
+                    extensionlist[i].no = i * 1 +1
+                    extensionlist[i].key = "extensionno"+extensionlist[i].extensionno
+                }
+                this.setState({extensionlist})
+            })
+        })
+    }
+    render() {
+        const {fileList} = this.state.fileList
+        const noticecolumns = [
+            {
+                title: '编号',
+                dataIndex: 'no',
+                key: 'no',
+                render: text => <span>{text}</span>
+              },
+              {
+                title: '内容',
+                dataIndex: 'word',
+                key: 'word',
+                render: text => <span>{text}</span>
+              },
+              {
+                  title: '操作',
+                  dataIndex: 'opertion',
+                  key: 'operation',
+                  render: ()=>(<><Button>删除</Button></>)  
+              }
+        ]
+        const extensioncolumns = [
+            {
+                title: '编号',
+                dataIndex: 'no',
+                key: 'no',
+                render: text => <span>{text}</span>
+            },
+            {
+                title: '简介',
+                dataIndex: 'word',
+                key: 'word',
+                render: text => <span>{text}</span>
+            },
+            {
+                title: '链接',
+                dataIndex: 'picturelink',
+                key: 'picturelink',
+                render: text => <span>{text}</span>
+            },
+            {
+                title: '图片',
+                dataIndex: 'picturepath',
+                key: 'picturepath',
+                render: text => <Image width={200} height={120} src={text}></Image>
+            },
+            {
+                title: '操作',
+                dataIndex: 'opertion',
+                key: 'operation',
+                render: ()=>(<><Button>删除</Button></>)  
+            }
+        ]
+        return (
+            <div style={{ width: "80%", margin: "auto" }}>
+                <div>
+                    通知<span style={{ color: "red" }}> * </span>:
+                    <Input ref={ this.noticeRef }/>
+                    <Button onClick={()=>this.uploadNotice()}>添加</Button>
+                </div>
+                <div>
+                    通知列表：
+                    <Table
+                    columns={noticecolumns}
+                    dataSource={this.state.noticelist}
+                    pagination={false}
+                    />
+                </div>
+                <div>
+                    通告链接:
+                    <Input ref={this.spreadLinkRef} placeholder="请填写完整网站。例：https://www.baidu.com/(√) www.baidu.com(×)"/>
+                    通告注释:
+                    <Input ref={this.spreadWordRef}/>
+                    上传图片<span style={{ color: "red" }}> * </span>:
+                    <Upload
+                        name="logo"
+                        action="/users/admin/uploadimg"
+                        listType="picture"
+                        onRemove={(file)=>this.removeImg(file)}
+                        maxCount="1"
+                        data={file=>({
+                            word: this.spreadWordRef.current.input.value,
+                            picturelink: this.spreadLinkRef.current.input.value,
+                            username: this.props.username,
+                            useraccount: this.props.useraccount
+                        })}
+                        fileList={fileList}
+                        onChange={(file)=>this.handleChangeImg(file)}
+                    >
+                        <Button icon={<UploadOutlined />}>点击上传</Button>
+                    </Upload>
+                    <Button onClick={() => this.uploadExtension()}>确认提交</Button>
+                </div>
+                <div>
+                    通告列表：
+                    <Table
+                    columns={extensioncolumns}
+                    dataSource={this.state.extensionlist}
+                    pagination={false}
+                    />
+                </div>
+            </div>
+        )
+    }
+}
+//file and link
+class FileAndLink extends Component {
+    linknameRef = React.createRef()
+    linkpathRef = React.createRef()
+    state = {
+        relatedlinks: [],
+        fileslist: []
+    }
+    componentDidMount(){
+        this.axios.get("/users/admin/getrelatedlinks")
+        .then(res=>{
+            for(let i in res.data){
+                res.data[i]["key"] = ""
+                res.data[i]["key"] += "relatedlinks"+i
+            }
+            this.setState({linklist: res.data})
+        })
+        this.axios.get("/users/admin/getfiles")
+        .then(res=>{
+            for(let i in res.data){
+                res.data[i]["key"] = ""
+                res.data[i]["key"] += "files"+i
+            }
+            this.setState({fileslist: res.data})
+        })
+    }
+    addrelatedlinks = () =>{
+        let name = this.linknameRef.current.input.value
+        let path = this.linkpathRef.current.input.value
+        this.axios.get("/users/admin/addrelatedlinks?linkpath="+path+"&linkname="+name)
+        .then(res=>{
+            console.log("addrelatedlinks")
+            this.axios.get("/users/admin/getrelatedlinks")
+            .then(res=>{
+                for(let i in res.data){
+                    res.data[i]["key"] = ""
+                    res.data[i]["key"] += "relatedlinks"+i
+                }
+                this.setState({linklist: res.data})
+            })
+        })
+    }
+    deleterelatedlinks = (name) => {
+        this.axios.get("/users/admin/deleterelatedlinks?linkname="+name)
+        .then(res=>{
+            this.axios.get("/users/admin/getrelatedlinks")
+            .then(res=>{
+                for(let i in res.data){
+                    res.data[i]["key"] = ""
+                    res.data[i]["key"] += "relatedlinks"+i
+                }
+                this.setState({linklist: res.data})
+            })
+        })
+    }
+    addfiles = () =>{
+        this.axios.get("/users/admin/getfiles")
+        .then(res=>{
+            for(let i in res.data){
+                res.data[i]["key"] = ""
+                res.data[i]["key"] += "files"+i
+            }
+            this.setState({fileslist: res.data})
+        })
+    }
+    deletefiles = (name) => {
+        this.axios.get("/users/admin/deletefiles?filesname="+name)
+        .then(res=>{
+            this.axios.get("/users/admin/getfiles")
+            .then(res=>{
+                for(let i in res.data){
+                    res.data[i]["key"] = ""
+                    res.data[i]["key"] += "files"+i
+                }
+                this.setState({fileslist: res.data})
+            })
+        })
+    }
+    render(){
+        const filescolumns=[
+            {
+                title: "文件名",
+                dataIndex: "filesname",
+                key: "filesname"
+            },
+            {
+                title: "文件链接",
+                dataIndex: "fileslink",
+                key: "fileslink"
+            },
+            {
+                title: '操作',
+                key: 'operation',
+                render: (_,record)=>(
+                    <>
+                    <Button onClick={()=>this.deletefiles(record.filesname)}>删除</Button>
+                    </>
+                )
+            }
+        ]
+        const linkcolumns=[
+            {
+                title: '链接名称',
+                dataIndex: 'linkname',
+                key: 'linkname',
+              },
+              {
+                title: '链接地址',
+                dataIndex: 'linkpath',
+                key: 'linkpath',
+              },
+              {
+                  title: '操作',
+                  key: 'operation',
+                  render: (_,record)=>(
+                      <>
+                      <Button onClick={()=>this.deleterelatedlinks(record.linkname)}>删除</Button>
+                      </>
+                  )
+              }
+        ]
+        return(
+            <div style={{ width: "80%", margin: "auto" }}>
+                <div>
+                    <p>文件列表: </p>
+                    <Upload
+                        name="logo"
+                        action="/users/admin/addfiles"
+                        listType="file"
+                        maxCount="1"
+                        showUploadList={false}
+                        onChange={()=>this.addfiles()}
+                    >
+                        <Button icon={<UploadOutlined />}>上传文件</Button>
+                    </Upload>
+                </div>
+                <div>
+                    <Table
+                        dataSource={this.state.fileslist}
+                        columns={filescolumns}
+                    />
+                </div>
+                <div>
+                    <p>相关链接: </p>
+                    <Input ref={this.linknameRef} addonBefore="名称"/>
+                    <Input ref={this.linkpathRef} addonBefore="链接地址"/>
+                    <Button type="primary" onClick={() => this.addrelatedlinks()}>添加</Button>
+                </div>
+                <div>
+                    <Table
+                        dataSource={this.state.linklist}
+                        columns={linkcolumns}
+                    />
+                </div>
+            </div>
+        )
+    }
+}
+class Feedback extends Component{
+    state = {
+        feedbacklist: []
+    }
+    componentDidMount(){
+        this.axios.get("/users/admin/getfeedback")
+        .then(res=>{
+            this.setState({feedbacklist: res.data.msg})
+        })
+    }
+    render(){
+        const feedbackcolumns = [
+            {
+                title:"反馈时间",
+                dataIndex: "feedbackdate",
+                key:"feedbackdate"
+            },
+            {
+                title:"反馈详情",
+                dataIndex: "feedbackword",
+                key:"feedbackword"
+            }
+        ]
+        return(
+            <div style={{width:"80%",margin:"auto"}}>
+                <p>反馈信息</p>
+                <Table
+                    dataSource={this.state.feedbacklist}
+                    columns={feedbackcolumns}
+                />
+            </div>
+        )
+    }
+}
 
 export default class AdminOperation extends Component {
     render() {
@@ -613,6 +1020,18 @@ export default class AdminOperation extends Component {
                     {
                         (this.props.operationPage === "试卷信息" || this.props.operationPage === "题目信息") &&
                         <Paq operationPage={this.props.operationPage}></Paq>
+                    }
+                    {
+                        this.props.operationPage === "发布通告" &&
+                        <IssueNotice username={ this.props.username } useraccount={ this.props.useraccount }></IssueNotice>
+                    }
+                    {
+                        this.props.operationPage === "文件与链接" &&
+                        <FileAndLink username={ this.props.username } useraccount={ this.props.useraccount } ></FileAndLink>
+                    }
+                    {
+                        this.props.operationPage === "反馈" &&
+                        <Feedback></Feedback>
                     }
                 </div>
             </div>

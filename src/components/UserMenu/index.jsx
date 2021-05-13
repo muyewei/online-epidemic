@@ -19,9 +19,9 @@ export default class Menu extends Component {
         ],
         itemValue: ""
     }
-    componentDidMount = () => {
-        console.log("menu: ", this.props)
-    }
+    // componentDidMount = () => {
+    //     console.log("menu: ", this.props)
+    // }
     showItem = (value) => {
         if (this.state.itemValue === value) {
             this.setState({itemValue: ""})

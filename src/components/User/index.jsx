@@ -36,10 +36,10 @@ export default class User extends Component {
                 </div>
                 <div className={styles.container}>
                     <div className={styles.aside}>
-                        <UserMenu username={this.props.username} menu={this.props.menu} callListName={this.checkListName}></UserMenu>
+                        <UserMenu username={this.props.username} useraccount={ this.props.useraccount } menu={this.props.menu} callListName={this.checkListName}></UserMenu>
                     </div>
                     <div className={styles.main}>
-                        <UserMain identify={this.props.identify} listName={this.state.listName} account={this.props.account} username={this.props.username} paperno={this.state.paperno} operationPage={this.state.listName[1]} ctp={(paperno) => this.ctp(paperno)} ctpq={(questionno)=>this.ctpq(questionno)}></UserMain>
+                        <UserMain identify={this.props.identify} login={this.props.login} listName={this.state.listName} useraccount={ this.props.useraccount } username={this.props.username} paperno={this.state.paperno} operationPage={this.state.listName[1]} ctp={(paperno) => this.ctp(paperno)} ctpq={(questionno)=>this.ctpq(questionno)}></UserMain>
                     </div>
                 </div>
             </>

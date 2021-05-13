@@ -11,12 +11,8 @@ class Admin extends Component {
     state = {
         menu: [
             {
-                "title": "网站",
-                "list": [{name:"网站详情",content: "admin1"}]
-            },
-            {
-                "title": "信息",
-                "list": [{name:"个人信息",content: "admin2"}]
+                "title": "个人信息",
+                "list": [{name:"信息详情",content: "admin2"}]
             },
             {
                 "title": "试卷列表",
@@ -33,13 +29,17 @@ class Admin extends Component {
             {
                 "title": "用户列表",
                 "list": [{name:"普通用户", content:"admin8"},{name:"发布用户",content:"admin9"},{name:"管理员",content:"admin10"}]
+            },
+            {
+                "title": "信息交互",
+                "list": [{name:"发布通告", content:"admin11"},{name:"文件与链接",content:"admin12"},{name: "反馈",content:"admin13"}]
             }
         ]
     }
     render() {
         return (
             <div style={{height: '100%'}}>
-                <User username={ this.props.loginState.user } identify={this.props.loginState.identify} menu={ this.state.menu }></User>
+                <User username={ this.props.loginState.username } useraccount={ this.props.loginState.useraccount } identify={this.props.loginState.identify} menu={ this.state.menu }></User>
             </div>
         )
     }

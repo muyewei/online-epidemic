@@ -11,7 +11,7 @@ class UserJump extends Component {
     constructor(props) {
         super(props)
         let identify = this.props.loginState.identify.replace(/[ ]/g, "")
-        console.log('userjump: ', identify)
+        // console.log('userjump: ', identify)
         identify === "normal" ? this.props.history.push("/user/normal")
             : identify === "publisher" ? this.props.history.push("/user/publisher")
                 : identify === "admin" ? this.props.history.push("/user/admin")

@@ -8,7 +8,7 @@ export default class QuestionList extends Component {
 
   componentDidMount() {
     console.log("QuestionList didmount: ", this.props)
-    this.axios.get("/users/question/getQuestionList?user_account=" + this.props.username)
+    this.axios.get("/users/question/getQuestionList?user_account=" + this.props.useraccount)
       .then((res) => {
         for (let i in res.data) {
           res.data[i].key = res.data[i].questionno

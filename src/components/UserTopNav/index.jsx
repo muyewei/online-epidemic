@@ -27,7 +27,7 @@ export default class TopNav extends Component {
                     </Link>
                 </div>
                 <div className={style["tn-exit"]}>
-                    <Link to="/login" onClick={this.logOff}>返回主页注销</Link>
+                    <Link to="/login" onClick={this.logOff}>返回主页</Link>
                 </div>
                 <div className={style["tn-user-icon"]}>
                     <TeamOutlined />

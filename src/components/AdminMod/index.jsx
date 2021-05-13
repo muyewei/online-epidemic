@@ -31,9 +31,8 @@ export default class AdminMod extends Component {
                         <UserMenu username={this.props.username} menu={this.props.menu} callListName={this.checkListName}></UserMenu>
                     </div>
                     <div className={styles.main}>
-                        <UserMain listName={this.state.listName} username={this.props.username} paperno={this.state.paperno} operationPage={this.state.listName[1]} ctp={(paperno) => this.ctp(paperno)}></UserMain>
+                        <UserMain listName={this.state.listName} username={ this.props.username } useraccount={ this.props.useraccount } paperno={this.state.paperno} operationPage={this.state.listName[1]} ctp={(paperno) => this.ctp(paperno)}></UserMain>
                     </div></div>
-
             </>
         )
     }

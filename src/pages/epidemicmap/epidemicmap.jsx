@@ -320,9 +320,9 @@ export default class Epidemicmap extends Component {
                             <li>
                                 <span className={this.state.showCountry === "国内疫情" ? "epidemic-map-active" : ""} onClick={(e) => this.changeChinaOrWorld(e)}>国内疫情</span>
                             </li>
-                            <li>
+                            {/* <li>
                                 <span  className={this.state.showCountry === "国外疫情" ? "epidemic-map-active" : ""} onClick={(e) => this.changeChinaOrWorld(e)}>国外疫情</span>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                     <div className={`${this.state.showCountry === "国内疫情" ? "" : "epidemic-map-notshow"}`}>

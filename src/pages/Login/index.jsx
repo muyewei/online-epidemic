@@ -11,27 +11,29 @@ import { Form, Input, Button, Checkbox,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './index.css'
 import { Link } from "react-router-dom"
-
+//normal123
+//control123
+//admin123
 class Login extends Component {
     state = {
-        username: "admin123",
+        useraccount: "admin123",
         password: "admin123"
     }
     componentDidMount() {
-        if (this.props.loginState.user !== "visitor") {
+        if (this.props.loginState.username !== "visitor") {
             this.props.history.push(`/index`)
         }
     }
     onFinish = (values) => {
         this.login(values)
     };
-    //登录 --获取Input框的账号密码（username，password），密码加密 账号不加密后上传服务器端验证
+    //登录 --获取Input框的账号密码（useraccount，password），密码加密 账号不加密后上传服务器端验证
     login = (loginInput) => {
         let secretKey = "moran"
-        let username = loginInput.username
+        let useraccount = loginInput.useraccount
         let password = SHA1(MD5(loginInput.password)).toString()
         password = AES.encrypt(password, secretKey).toString()
-        this.axios.post("/users/account/login", {username,password})
+        this.axios.post("/users/account/login", {useraccount,password})
             .then((res) => {
                 if(res.data.msg === "登录失败"){
                     message.error("账号或密码错误")
@@ -42,10 +44,10 @@ class Login extends Component {
                     exp.setTime(exp.getTime() + 60 * 60 * 1000);
                     document.cookie = "token=" + res.data.token + ";expires=" + exp.toGMTString() + ";path=/"
                     console.log("login post: ", res.data)
-                    this.props.login({user: res.data.user, identify: res.data.identify, account: res.data.account})
+                    this.props.login({username: res.data.username, identify: res.data.identify, useraccount: res.data.useraccount})
                     this.props.history.push(`/index`)
                 }else{
-                    message.warn("未知错误，请重新启动浏览器")
+                    message.warn("未知错误，请重新启动浏览器或稍后使用")
                 }
         })
     }
@@ -57,7 +59,7 @@ class Login extends Component {
                     className="login-form"
                     initialValues={{
                         remember: true,
-                        username: this.state.username,
+                        useraccount: this.state.useraccount,
                         password: this.state.password
                     }}
                     onFinish={this.onFinish}
@@ -66,7 +68,7 @@ class Login extends Component {
                 <div>账号：</div>
                 <p></p>
                 <Form.Item
-                    name="username"
+                    name="useraccount"
                     rules={[
                         {
                             required: true,
@@ -74,7 +76,7 @@ class Login extends Component {
                         },
                     ]}
                 >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"/>
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="账号"/>
                 </Form.Item>
                 <div>密码：</div>
                 <p></p>

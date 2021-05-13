@@ -16,11 +16,11 @@ export default class CreateQuestionList extends Component{
             <div className={style["createQuestionList"]}>
                 {
                     this.props.type === "创建题目" &&
-                    <Cq username={this.props.username} account={this.props.account} type={this.props.operationPage} questionno={this.state.questionno}></Cq>
+                    <Cq username={this.props.username} useraccount={this.props.useraccount} type={this.props.operationPage} questionno={this.state.questionno}></Cq>
                 }
                 {
                     this.props.type === "题目列表" &&
-                    <Ql username={this.props.username} createToPublishQ={(no)=>this.createToPublishQ(no)} account={this.props.account} type={this.props.operationPage} createToPublish={()=>this.createToPublish()}></Ql>
+                    <Ql username={this.props.username} createToPublishQ={(no)=>this.createToPublishQ(no)} useraccount={this.props.useraccount} type={this.props.operationPage} createToPublish={()=>this.createToPublish()}></Ql>
                 }
             </div>
         )

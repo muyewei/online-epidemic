@@ -126,13 +126,14 @@ export default class Createquestion extends Component {
         // console.log("Createquestion mount: ", this.props)
         this.axios.get("/users/question/getquestion?questionno="+this.props.questionno)
         .then(res=>{
-            let type = res.data[0].type === "singletype" ? "单选题" :
-            res.data[0].type === "muilttype" ? "多选题" :
-            res.data[0].type === "judgetype" ? "判断题" :
-            res.data[0].type === "gaptype" ? "填空题" :
-            res.data[0].type === "shorttype" ? "简答题" : ""
-            this[res.data[0].type+"Ref"].current.setFieldsValue(JSON.parse(res.data[0].value))
-            this.setState({defaultquestion: type,[res.data[0].type]: JSON.parse(res.data[0].value)})
+            // console.log(res.data)
+            // let type = res.data[0].papertype === "singletype" ? "单选题" :
+            // res.data[0].papertype === "muilttype" ? "多选题" :
+            // res.data[0].papertype === "judgetype" ? "判断题" :
+            // res.data[0].papertype === "gaptype" ? "填空题" :
+            // res.data[0].papertype === "shorttype" ? "简答题" : ""
+            // this[res.data[0].papertype+"Ref"].current.setFieldsValue(JSON.parse(res.data[0].value))
+            // this.setState({defaultquestion: type,[res.data[0].type]: JSON.parse(res.data[0].value)})
         })
     }
     

@@ -21,9 +21,8 @@ class Normal extends Component {
                 {
                     this.state.test === false ?
                     <Normalmod gototest={this.gototest} history={this.props.history}></Normalmod> :
-                    <Papertest gobackmod={this.gobackmod} username={this.props.loginState.user} paperno={this.state.paperno}></Papertest>
+                    <Papertest gobackmod={this.gobackmod} username={this.props.loginState.username} useraccount={this.props.loginState.useraccount} paperno={this.state.paperno}></Papertest>
                 }
-                
             </div>
         )
 

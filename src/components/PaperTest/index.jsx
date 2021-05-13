@@ -82,15 +82,12 @@ export default class Papertest extends Component {
             paperno: this.props.paperno,
             papername: this.state.papername,
             timecosume: this.state.countdown,
-            user_account: this.props.username
+            useraccount: this.props.useraccount,
+            username: this.props.username
         })
         .then((res)=>{
 
         })
-    }
-    resetpaper = () =>{
-        console.log("resetpaper")
-        this.setState({answer: [""]})
     }
     gobackweb = () =>{
         // console.log("gobackweb",this.props)
@@ -199,10 +196,9 @@ export default class Papertest extends Component {
                             })
                         }
                     </div>
-                    <div className={style["papertest-bot"]}>
-                        <Button onClick={() => this.submitpaper()} disabled={this.state.hasclick}>提交</Button>
-                        <Button onClick={() => this.resetpaper()}>重置</Button>
-                        <Button onClick={() => this.gobackweb()}>返回</Button>
+                    <div className={style["papertest-bot"]} style={{padding: "10px"}}>
+                        <Button type="primary" onClick={() => this.submitpaper()} disabled={this.state.hasclick}>提交</Button>
+                        <Button style={{marginLeft: "10px"}} onClick={() => this.gobackweb()}>返回</Button>
                     </div>
                 </div>
             </div>

@@ -6,12 +6,12 @@ import { createCancelAction } from "../../redux/actions/login_action"
 
 
 class topnav extends Component {
-    componentDidMount(){
-        console.log("topnav: ", this.props.loginState)
-    }
+    // componentDidMount(){
+    //     console.log("topnav: ", this.props.loginState)
+    // }
     cancelAccount = () => {
         this.axios.get("/users/account/cancel",{params:this.props.loginState})
-        this.props.cancel({user: "visitor", identify: "visitor"})
+        this.props.cancel({username: "visitor", identify: "visitor", useraccount: "0"})
     }
     render() {
         return (
@@ -31,13 +31,13 @@ class topnav extends Component {
                             <Link to="/time">疫情时间</Link>
                         </li>
                         <li>
-                            <Link to="/share">交流</Link>
+                            <Link to="/share">分享</Link>
                         </li>
                         <li>
                             {
-                                this.props.loginState.user !== "visitor" ? (
+                                this.props.loginState.username !== "visitor" ? (
                                     <ul>
-                                        <li><Link to="/user">{ this.props.loginState.user }</Link></li>
+                                        <li><Link to="/user">{ this.props.loginState.username }</Link></li>
                                         <li><Link to="/index" style={{textOverflow:"ellipsis",whiteSpace: "nowrap"}} title="点击注销" onClick={() => this.cancelAccount()}>点击注销</Link></li>
                                     </ul>
                                     

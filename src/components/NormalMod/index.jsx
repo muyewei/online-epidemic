@@ -15,7 +15,7 @@ export default class NormalMod extends Component{
         usepaperlist: [],
         password: "",
         paperno: "",
-        type: "list",
+        type: "notlist",
         isModalVisible: false
     }
     componentDidMount(){
@@ -142,7 +142,9 @@ export default class NormalMod extends Component{
                         </div>
                     </div>
                 </div>
-                <div className={style["normal-top"]}></div>
+                <div className={style["normal-top"]}>
+                <img style={{width:"100%",height:"100%"}} src={process.env.PUBLIC_URL + '/image/liangse.jpg'} alt="图片"/>;
+                </div>
                 <div className={style["normal-container"]} style={{display: this.state.type === "notlist" ? "block" : "none"}}>
                     <div>
                         <div className={style["normal-new"]}>
